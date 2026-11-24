@@ -1,1 +1,2928 @@
+<!DOCTYPE html>
+<html lang="ne">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IT Zone Nepal — Member, Technician, AMC & Admin</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: Arial, sans-serif;
+      background: #eef4ff;
+      color: #0f172a;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      line-height: 1.5;
+    }
+    a, button { font-family: Arial, sans-serif; text-decoration: none; cursor: pointer; }
 
+    body.technician-mode header {
+      display: none !important;
+    }
+
+    header {
+      background: #ffffff;
+      border-bottom: 2px solid #cbd5e1;
+      padding: 12px 18px;
+    }
+    .nav-wrap {
+      max-width: 1180px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .brand-box {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      cursor: pointer;
+    }
+
+    @keyframes logoMoveAnim {
+      0%   { transform: translate(0px, 0px) rotate(-2deg) scale(1); }
+      25%  { transform: translate(5px, -3px) rotate(2deg) scale(1.04); }
+      50%  { transform: translate(0px, 2px) rotate(-1.5deg) scale(1.02); }
+      75%  { transform: translate(-5px, -2px) rotate(2deg) scale(1.04); }
+      100% { transform: translate(0px, 0px) rotate(-2deg) scale(1); }
+    }
+
+    .brand-logo-wrap {
+      width: 64px;
+      height: 52px;
+      border-radius: 9px;
+      border: 2px solid #0f3d7c;
+      background: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      flex-shrink: 0;
+      animation: logoMoveAnim 3.2s ease-in-out infinite;
+    }
+    .brand-logo-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+    .brand-logo-fb {
+      display: none;
+      font-size: 11px;
+      font-weight: 900;
+      color: #0f3d7c;
+      text-align: center;
+      padding: 2px;
+    }
+
+    .brand-name { font-size: 19px; font-weight: 900; color: #0f3d7c; display: block; }
+    .brand-tag { font-size: 11px; font-weight: 700; color: #dc2626; display: block; }
+
+    .nav-menu {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+    .nav-btn {
+      padding: 8px 13px;
+      border: 2px solid transparent;
+      color: #ffffff;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 800;
+    }
+    .nav-btn.active {
+      border-color: #0f172a;
+      box-shadow: 0 0 0 2px rgba(15, 23, 42, 0.22);
+    }
+
+    .c-home         { background: #0f3d7c; }
+    .c-services     { background: #0d9488; }
+    .c-amc          { background: #ea580c; }
+    .c-projects     { background: #7c3aed; }
+    .c-certificates { background: #d97706; }
+    .c-contact      { background: #0284c7; }
+    .c-member       { background: #16a34a; }
+    .c-technician   { background: #dc2626; }
+
+    .btn {
+      display: inline-block;
+      padding: 9px 14px;
+      border: none;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #ffffff;
+    }
+    .btn-sm {
+      padding: 6px 10px;
+      font-size: 11.5px;
+      border-radius: 6px;
+    }
+    .btn-blue { background: #0f3d7c; }
+    .btn-green { background: #16a34a; }
+    .btn-red { background: #dc2626; }
+    .btn-amber { background: #d97706; }
+    .btn-orange { background: #ea580c; }
+    .btn-gray { background: #e2e8f0; color: #0f172a; }
+    .btn-row { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 12px; }
+
+    main {
+      flex: 1;
+      max-width: 1140px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 24px 18px;
+    }
+    .page-panel {
+      display: none;
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 14px;
+      padding: 26px;
+      box-shadow: 0 6px 20px rgba(15, 61, 124, 0.06);
+    }
+    .page-panel.active { display: block; }
+
+    .page-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding-bottom: 12px;
+      margin-bottom: 18px;
+      border-bottom: 2px solid #e2e8f0;
+    }
+    .page-head h1, .page-head h2 {
+      font-size: 25px;
+      font-weight: 900;
+      color: #0f3d7c;
+    }
+
+    .feed-card {
+      background: #f8fafc;
+      border-left: 6px solid #0f3d7c;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+    .home-main-text {
+      font-size: 22px;
+      font-weight: 800;
+      color: #0f172a;
+      line-height: 1.65;
+      margin-bottom: 12px;
+    }
+    .home-sub-text {
+      font-size: 17px;
+      font-weight: 600;
+      color: #334155;
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+
+    @keyframes offerMotionAnim {
+      0%   { transform: translateX(0px) scale(1); }
+      25%  { transform: translateX(12px) scale(1.02); }
+      50%  { transform: translateX(0px) scale(1.03); }
+      75%  { transform: translateX(-12px) scale(1.02); }
+      100% { transform: translateX(0px) scale(1); }
+    }
+
+    .home-register-offer {
+      background: #dcfce7;
+      border: 2px solid #16a34a;
+      border-radius: 10px;
+      padding: 15px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      overflow: hidden;
+    }
+    .home-register-offer-text {
+      font-size: 19px;
+      font-weight: 900;
+      color: #14532d;
+      display: inline-block;
+      animation: offerMotionAnim 3.4s ease-in-out infinite;
+    }
+
+    .home-tech-section {
+      margin-top: 16px;
+      border: 1px solid #cbd5e1;
+      border-radius: 12px;
+      padding: 16px;
+      background: #f8fafc;
+    }
+    .home-tech-section h3 {
+      font-size: 18px;
+      font-weight: 900;
+      color: #0f3d7c;
+      margin-bottom: 12px;
+    }
+    .home-tech-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+    }
+    .home-tech-card {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      padding: 14px;
+      text-align: center;
+    }
+    .home-tech-photo {
+      width: 86px;
+      height: 86px;
+      margin: 0 auto 10px;
+      border-radius: 50%;
+      border: 3px solid #0f3d7c;
+      background: #dbeafe;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      font-size: 10px;
+      font-weight: 900;
+      color: #0f3d7c;
+    }
+    .home-tech-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+    .amc-intro-box {
+      background: #fff7ed;
+      border-left: 5px solid #ea580c;
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 18px;
+    }
+    .amc-format-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .amc-format-list li {
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 11px 13px;
+      font-size: 13.5px;
+    }
+    .amc-format-list li strong {
+      color: #0f3d7c;
+      display: block;
+      font-size: 14.5px;
+      margin-bottom: 2px;
+    }
+    .amc-badge {
+      display: inline-block;
+      padding: 2px 9px;
+      border-radius: 999px;
+      background: #dcfce7;
+      color: #15803d;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .id-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(270px, 310px));
+      gap: 20px;
+      margin-top: 16px;
+      justify-content: center;
+    }
+    .id-card-frame-outer {
+      background: #e2e8f0;
+      border: 3px solid #334155;
+      border-radius: 18px;
+      padding: 10px;
+    }
+    .id-card-slot {
+      width: 58px;
+      height: 10px;
+      background: #ffffff;
+      border: 2px solid #475569;
+      border-radius: 999px;
+      margin: 0 auto 8px;
+    }
+    .staff-id-card {
+      border: 2px solid #0f3d7c;
+      border-radius: 12px;
+      overflow: hidden;
+      background: #ffffff;
+    }
+    .id-card-top {
+      background: #0f3d7c;
+      color: #ffffff;
+      padding: 11px 12px;
+      text-align: center;
+      border-bottom: 4px solid #dc2626;
+    }
+    .id-card-top .co-title { font-size: 16px; font-weight: 900; }
+    .id-card-top .co-sub { font-size: 10px; font-weight: 700; }
+    .id-card-body { padding: 14px 12px 10px; text-align: center; background: #ffffff; }
+    .id-card-photo-frame {
+      width: 92px;
+      height: 98px;
+      margin: 0 auto 9px;
+      border-radius: 10px;
+      border: 3px solid #0f3d7c;
+      background: #dbeafe;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      font-size: 10px;
+      font-weight: 900;
+      color: #0f3d7c;
+    }
+    .id-card-photo-frame img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .id-card-name { font-size: 17px; font-weight: 900; color: #0f3d7c; text-transform: uppercase; }
+    .id-card-role {
+      display: inline-block;
+      margin: 4px 0 9px;
+      padding: 3px 12px;
+      border-radius: 999px;
+      background: #dc2626;
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 800;
+    }
+    .id-card-meta {
+      text-align: left;
+      background: #f8fafc;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 8px 10px;
+      font-size: 12px;
+      line-height: 1.65;
+    }
+    .id-card-foot {
+      background: #0f3d7c;
+      color: #ffffff;
+      font-size: 10px;
+      font-weight: 700;
+      text-align: center;
+      padding: 6px 8px;
+    }
+
+    .item-list { display: flex; flex-direction: column; gap: 14px; }
+    .item-card { border: 1px solid #dbeafe; border-radius: 10px; padding: 16px; background: #ffffff; }
+    .item-url { font-size: 12px; font-weight: 700; color: #15803d; margin-bottom: 3px; }
+    .item-title { font-size: 19px; font-weight: 800; color: #1a0dab; margin-bottom: 5px; }
+    .item-desc { font-size: 14px; color: #334155; margin-bottom: 8px; }
+    .disc-pill {
+      display: inline-block;
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-size: 12.5px;
+      font-weight: 800;
+      background: #fee2e2;
+      color: #991b1b;
+    }
+    .disc-pill.active { background: #16a34a; color: #ffffff; }
+    .amc-no-disc-pill {
+      display: inline-block;
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-size: 12.5px;
+      font-weight: 800;
+      background: #ffedd5;
+      color: #9a3412;
+    }
+
+    .banner { padding: 14px 16px; border-radius: 10px; margin-bottom: 16px; font-weight: 700; font-size: 14.5px; }
+    .banner.locked { background: #fef2f2; border: 1px solid #fca5a5; color: #991b1b; }
+    .banner.unlocked { background: #dcfce7; border: 1px solid #4ade80; color: #14532d; }
+
+    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+    .box-card { border: 1px solid #cbd5e1; border-radius: 12px; padding: 16px; background: #ffffff; }
+    .box-card h3 { font-size: 18px; color: #0f3d7c; margin-bottom: 10px; }
+    label { display: block; font-size: 12px; font-weight: 700; margin-top: 8px; margin-bottom: 3px; }
+    input[type="text"], input[type="tel"], input[type="password"], input[type="number"], input[type="file"], select, textarea {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid #94a3b8;
+      border-radius: 7px;
+      font-size: 13px;
+      font-family: Arial, sans-serif;
+      background: #ffffff;
+    }
+    textarea { min-height: 76px; resize: vertical; }
+
+    .perm-box {
+      margin-top: 10px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .perm-check {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12.5px;
+      font-weight: 800;
+      color: #0f172a;
+      margin-top: 0;
+      cursor: pointer;
+    }
+    .perm-check input[type="checkbox"] {
+      width: auto;
+      cursor: pointer;
+    }
+
+    .staff-lookup-card {
+      margin-top: 10px;
+      padding: 12px;
+      border-radius: 8px;
+      background: #f0f9ff;
+      border: 1.5px solid #0284c7;
+      display: none;
+    }
+    .staff-lookup-inner {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .staff-lookup-photo {
+      width: 58px;
+      height: 58px;
+      border-radius: 8px;
+      border: 2px solid #0f3d7c;
+      background: #dbeafe;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      font-size: 9px;
+      font-weight: 900;
+      color: #0f3d7c;
+      flex-shrink: 0;
+    }
+    .staff-lookup-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+    .reply-thread {
+      margin-top: 8px;
+      background: #f8fafc;
+      border-left: 3px solid #16a34a;
+      padding: 7px 9px;
+      border-radius: 5px;
+      font-size: 11.5px;
+    }
+
+    .forgot-box { display: none; margin-top: 14px; padding: 14px; border-radius: 10px; background: #fffbeb; border: 1px solid #f59e0b; }
+    .forgot-box h4 { font-size: 15px; color: #92400e; margin-bottom: 6px; }
+    .forgot-msg { margin-top: 8px; font-size: 12.5px; font-weight: 700; }
+
+    .code-result {
+      display: none;
+      margin-top: 12px;
+      padding: 12px 14px;
+      border-radius: 9px;
+      background: #dcfce7;
+      border: 1px solid #4ade80;
+      color: #14532d;
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .code-badge {
+      display: inline-block;
+      margin: 5px 0;
+      padding: 5px 12px;
+      border-radius: 6px;
+      background: #0f3d7c;
+      color: #ffffff;
+      font-size: 16px;
+      font-weight: 900;
+    }
+
+    #memberLoggedInPortal {
+      display: none;
+      margin-top: 18px;
+      border: 2px solid #16a34a;
+      border-radius: 14px;
+      padding: 20px;
+      background: #f0fdf4;
+    }
+    .member-portal-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding-bottom: 12px;
+      margin-bottom: 16px;
+      border-bottom: 1.5px solid #86efac;
+    }
+    .videos-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 14px; margin-top: 10px; }
+    .video-card { background: #ffffff; border: 1px solid #cbd5e1; border-radius: 10px; padding: 12px; }
+    .video-card video, .video-card iframe {
+      width: 100%; height: 175px; border-radius: 8px; border: none; background: #0f172a; display: block; margin-bottom: 8px;
+    }
+    .video-card-title { font-size: 15px; font-weight: 800; color: #0f3d7c; margin-bottom: 4px; }
+    .video-card-desc { font-size: 12.5px; color: #475569; }
+
+    .status-strip { margin-top: 16px; padding: 13px 16px; border-radius: 10px; background: #f1f5f9; border: 1px solid #cbd5e1; font-size: 13.5px; font-weight: 700; }
+
+    .report-wrap { margin-top: 16px; border: 2px solid #0f3d7c; border-radius: 10px; padding: 14px; background: #f8fafc; }
+    .small-report { max-width: 600px; margin: 14px auto 0; border: 1px solid #475569; border-radius: 8px; padding: 14px 16px; background: #ffffff; font-size: 12.5px; }
+    .report-head { text-align: center; border-bottom: 1px dashed #64748b; padding-bottom: 8px; margin-bottom: 10px; }
+    .report-tag { display: inline-block; margin-top: 4px; padding: 2px 10px; border-radius: 999px; background: #0f3d7c; color: #ffffff; font-size: 10.5px; font-weight: 700; }
+    .report-tech-bar { display: flex; align-items: center; gap: 10px; background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 7px 9px; margin-bottom: 10px; font-size: 11.5px; }
+    .report-tech-photo {
+      width: 48px; height: 48px; border-radius: 8px; border: 2px solid #0f3d7c; background: #dbeafe;
+      display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; font-size: 8.5px; font-weight: 800; color: #0f3d7c;
+    }
+    .report-tech-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .report-meta { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; font-size: 11.5px; border-bottom: 1px dotted #cbd5e1; padding-bottom: 8px; margin-bottom: 10px; }
+    .work-detail-box {
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 7px;
+      padding: 10px 12px;
+      margin-top: 8px;
+      white-space: pre-line;
+      font-size: 12.5px;
+      color: #0f172a;
+    }
+
+    table { width: 100%; border-collapse: collapse; font-size: 12px; background: #ffffff; }
+    th, td { border: 1px solid #cbd5e1; padding: 6px 7px; text-align: left; vertical-align: top; }
+    th { background: #eff6ff; color: #0f3d7c; }
+
+    .ticker { background: #0f3d7c; color: #ffffff; padding: 9px 14px; font-size: 13px; font-weight: 700; text-align: center; }
+    footer { background: #0f172a; color: #e2e8f0; text-align: center; padding: 13px; font-size: 13px; }
+
+    @media print {
+      header, .ticker, footer, .no-print { display: none !important; }
+      .page-panel, .report-wrap, .small-report { border: none !important; box-shadow: none !important; margin: 0 !important; padding: 0 !important; }
+      .small-report { max-width: 100% !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="nav-wrap">
+      <div class="brand-box" onclick="openPage('home')">
+        <div class="brand-logo-wrap">
+          <img class="site-logo-img" src="logo.jpeg" alt="IT Zone Nepal Logo" onerror="this.style.display='none'; document.querySelector('.brand-logo-fb').style.display='block';" />
+          <span class="brand-logo-fb">IT ZONE<br/>NEPAL</span>
+        </div>
+        <div>
+          <span class="brand-name">IT ZONE NEPAL</span>
+          <span class="brand-tag">YOUR IT SOLUTION PARTNER</span>
+        </div>
+      </div>
+
+      <div class="nav-menu">
+        <button type="button" class="nav-btn c-home active" data-page="home" onclick="openPage('home')">Home</button>
+        <button type="button" class="nav-btn c-services" data-page="services" onclick="openPage('services')">Services</button>
+        <button type="button" class="nav-btn c-amc" data-page="amc" onclick="openPage('amc')">AMC</button>
+        <button type="button" class="nav-btn c-projects" data-page="projects" onclick="openPage('projects')">Projects</button>
+        <button type="button" class="nav-btn c-certificates" data-page="certificates" onclick="openPage('certificates')">Certificates</button>
+        <button type="button" class="nav-btn c-contact" data-page="contact" onclick="openPage('contact')">Contact</button>
+        <button type="button" class="nav-btn c-member" data-page="member" onclick="openPage('member')">Member</button>
+        <button type="button" class="nav-btn c-technician" data-page="technician" onclick="openPage('technician')">Technician</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- 1. HOME -->
+    <section id="page-home" class="page-panel active">
+      <div class="page-head">
+        <h1>IT Zone Nepal — Feed & Updates</h1>
+      </div>
+
+      <div class="feed-card">
+        <p class="home-main-text">
+          सूर्यविनायक-२, भक्तपुर र न्युरोड, काठमाडौँबाट हामी IT, नेटवर्किङ, हार्डवेयर र सुरक्षा प्रणालीका सेवा दिन्छौँ।
+        </p>
+        <p class="home-sub-text">
+          CCTV जडान, अफिस नेटवर्किङ, कम्प्युटर/प्रिन्टर मर्मत र वार्षिक मर्मत सम्भार सेवा (AMC) का लागि सम्पर्क गर्नुहोस्: <strong>9851314060</strong>।
+        </p>
+
+        <div class="home-register-offer">
+          <div class="home-register-offer-text">
+            Member मा Register गर्दा Services मा 25% Discount पाउनुहोस्!
+          </div>
+        </div>
+      </div>
+
+      <div class="home-tech-section">
+        <h3>हाम्रा Technician टोली (Our Technician Team)</h3>
+        <div class="home-tech-grid" id="homeTechTeamGrid"></div>
+      </div>
+    </section>
+
+    <!-- 2. SERVICES -->
+    <section id="page-services" class="page-panel">
+      <div class="page-head">
+        <h2>Services — 25% Discount</h2>
+        <button type="button" class="btn btn-gray" onclick="openPage('home')">← Home</button>
+      </div>
+
+      <div id="serviceBanner" class="banner locked">
+        Services मा <strong>25% Discount</strong> पाउन कृपया <strong>Member</strong> मा गएर <strong>Register</strong> (वा Login) गर्नुहोस्।
+      </div>
+
+      <div class="item-list">
+        <div class="item-card">
+          <div class="item-url">itzonenepal.com.np › services › cctv</div>
+          <div class="item-title">CCTV Camera Installation & Surveillance Setup</div>
+          <div class="item-desc">HD तथा IP CCTV क्यामेरा जडान, DVR/NVR कन्फिगरेसन र मोबाइल मनिटरिङ सेवा।</div>
+          <span class="disc-pill service-tag">Register गर्दा 25% Discount</span>
+        </div>
+        <div class="item-card">
+          <div class="item-url">itzonenepal.com.np › services › networking</div>
+          <div class="item-title">Office Networking, LAN Cabling & Wi-Fi Setup</div>
+          <div class="item-desc">LAN केबलिङ, स्विच, राउटर, सर्भर र्‍याक र सुरक्षित नेटवर्किङ सेवा।</div>
+          <span class="disc-pill service-tag">Register गर्दा 25% Discount</span>
+        </div>
+        <div class="item-card">
+          <div class="item-url">itzonenepal.com.np › services › hardware-it</div>
+          <div class="item-title">Computer Hardware, Printer & Complete IT Setup</div>
+          <div class="item-desc">डेस्कटप, ल्यापटप, प्रिन्टर मर्मत र अफिस IT सेटअप सेवा।</div>
+          <span class="disc-pill service-tag">Register गर्दा 25% Discount</span>
+        </div>
+        <div class="item-card">
+          <div class="item-url">itzonenepal.com.np › services › amc</div>
+          <div class="item-title">AMC Service (Annual Maintenance Contract — वार्षिक मर्मत सम्भार सेवा)</div>
+          <div class="item-desc">अफिस, विद्यालय, सहकारी र व्यवसायका कम्प्युटर, प्रिन्टर, नेटवर्किङ तथा CCTV प्रणालीको मासिक/त्रैमासिक नियमित जाँच तथा आकस्मिक मर्मत सेवा।</div>
+          <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+            <span class="amc-no-disc-pill">AMC Service (Annual Contract)</span>
+            <button type="button" class="btn btn-orange btn-sm" onclick="openPage('amc')">AMC Format & Office List हेर्नुहोस्</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. AMC SECTION -->
+    <section id="page-amc" class="page-panel">
+      <div class="page-head">
+        <h2>AMC — Annual Maintenance Contract (वार्षिक मर्मत सम्भार सेवा)</h2>
+        <button type="button" class="btn btn-gray" onclick="openPage('home')">← Home</button>
+      </div>
+
+      <div class="amc-intro-box">
+        <div style="font-size:17px; font-weight:900; color:#9a3412; margin-bottom:4px;">
+          IT Zone Nepal — वार्षिक मर्मत सम्भार सम्झौता (AMC)
+        </div>
+        <div style="font-size:13.5px; color:#334155;">
+          अफिस, विद्यालय, बैंक/सहकारी, अस्पताल र व्यावसायिक संस्थाहरूको कम्प्युटर, प्रिन्टर, नेटवर्किङ तथा CCTV प्रणाली वर्षभरि सुचारु राख्न नियमित मर्मत सम्भार सेवा।
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="box-card">
+          <h3>1. AMC Format List (AMC ढाँचा तथा सेवा सूची)</h3>
+          <ul class="amc-format-list">
+            <li>
+              <strong>1. Preventive Maintenance (मासिक/त्रैमासिक नियमित जाँच)</strong>
+              प्रत्येक महिना वा त्रैमासिक रूपमा कम्प्युटर, ल्यापटप, सफ्टवेयर अपडेट, भाइरस क्लिनअप र हार्डवेयर सफाइ।
+            </li>
+            <li>
+              <strong>2. Breakdown / Emergency Support (आकस्मिक मर्मत सेवा)</strong>
+              अफिसको सिस्टम, इन्टरनेट वा प्रिन्टर बिग्रिएमा प्राथमिकताका साथ अन-साइट तथा रिमोट सपोर्ट।
+            </li>
+            <li>
+              <strong>3. CCTV & Surveillance AMC (क्यामेरा र DVR/NVR जाँच)</strong>
+              सबै क्यामेराको भिडियो क्लियारिटी, हार्डडिस्क रेकर्डिङ ब्याकअप, पावर सप्लाई र मोबाइल अनलाइन भ्यू जाँच।
+            </li>
+            <li>
+              <strong>4. Office Network & Wi-Fi AMC (नेटवर्किङ तथा राउटर व्यवस्थापन)</strong>
+              LAN केबल, स्विच, राउटर, सर्भर र्‍याक र प्रिन्टर सेयरिङको नियमित परीक्षण तथा सुरक्षा।
+            </li>
+            <li>
+              <strong>5. AMC Agreement & Service Log Format (सम्झौता र रिपोर्ट ढाँचा)</strong>
+              वार्षिक सम्झौता पत्र (१ वर्षे अवधि), प्रत्येक भिजिटको Service Report Card, र Spare Parts पारदर्शी दररेट।
+            </li>
+          </ul>
+          <div class="btn-row">
+            <a class="btn btn-green" href="https://wa.me/9779851314060?text=Namaste%20IT%20Zone%20Nepal%2C%20hamro%20office%20ko%20lagi%20AMC%20Format%20ra%20Quotation%20pathaidinu%20hola." target="_blank" rel="noopener noreferrer">
+              AMC Format & Quotation माग्नुहोस् (WhatsApp)
+            </a>
+          </div>
+        </div>
+
+        <div class="box-card">
+          <h3>2. AMC गरेका Office हरूको Name List</h3>
+          <p style="font-size:12px; color:#475569; margin-bottom:10px;">
+            IT Zone Nepal बाट वार्षिक मर्मत सम्भार (AMC) सेवा लिइरहेका प्रमुख कार्यालयहरू:
+          </p>
+          <table>
+            <thead>
+              <tr>
+                <th style="width:45px;">S.N.</th>
+                <th>Office Name</th>
+                <th>Location</th>
+                <th>AMC Package</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="amcOfficesTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. PROJECTS -->
+    <section id="page-projects" class="page-panel">
+      <div class="page-head">
+        <h2>Completed Projects</h2>
+        <button type="button" class="btn btn-gray" onclick="openPage('home')">← Home</button>
+      </div>
+      <div class="item-list">
+        <div class="item-card">
+          <div class="item-url">itzonenepal.com.np › projects › office-lan</div>
+          <div class="item-title">अफिस नेटवर्किङ तथा LAN केबलिङ सम्पन्न</div>
+          <div class="item-desc">कम्प्युटर, प्रिन्टर र राउटर जोड्ने पूर्ण नेटवर्किङ तथा र्‍याक व्यवस्थापन सम्पन्न।</div>
+        </div>
+        <div class="item-card">
+          <div class="item-url">itzonenepal.com.np › projects › cctv-setup</div>
+          <div class="item-title">अफिस तथा परिसरमा CCTV जडान सम्पन्न</div>
+          <div class="item-desc">२४सै घण्टा रेकर्डिङ तथा मोबाइलबाट हेर्न मिल्ने CCTV प्रणाली जडान।</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. CERTIFICATES -->
+    <section id="page-certificates" class="page-panel">
+      <div class="page-head">
+        <h2>Certificates</h2>
+        <button type="button" class="btn btn-gray" onclick="openPage('home')">← Home</button>
+      </div>
+      <div class="item-list">
+        <div class="item-card">
+          <div class="item-url">itzonenepal.com.np › certificates › registration</div>
+          <div class="item-title">कम्पनी दर्ता प्रमाणपत्र</div>
+          <div class="item-desc">नेपाल सरकारको नियमअनुसार दर्ता भएको आधिकारिक व्यावसायिक प्रमाणपत्र।</div>
+        </div>
+        <div class="item-card">
+          <div class="item-url">itzonenepal.com.np › certificates › pan-vat</div>
+          <div class="item-title">आधिकारिक प्रमाणपत्रहरू</div>
+          <div class="item-desc">आधिकारिक दर्ता तथा IT/CCTV प्रणालीसम्बन्धी प्रमाणपत्रहरू।</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. CONTACT -->
+    <section id="page-contact" class="page-panel">
+      <div class="page-head">
+        <h2>Contact Us</h2>
+        <button type="button" class="btn btn-gray" onclick="openPage('home')">← Home</button>
+      </div>
+      <div class="item-list">
+        <div class="item-card">
+          <div class="item-url">itzonenepal.com.np › contact › whatsapp</div>
+          <div class="item-title">WhatsApp & Phone: 9851314060</div>
+          <div class="item-desc">
+            <a class="btn btn-green" href="https://wa.me/9779851314060?text=Namaste%20IT%20Zone%20Nepal" target="_blank" rel="noopener noreferrer">
+              Open WhatsApp (9851314060)
+            </a>
+          </div>
+        </div>
+        <div class="item-card">
+          <div class="item-url">itzonenepal.com.np › contact › address</div>
+          <div class="item-title">ठेगाना (Locations)</div>
+          <div class="item-desc">सूर्यविनायक-२, भक्तपुर र न्युरोड, काठमाडौँ, नेपाल।</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. SEPARATE MEMBER SECTION -->
+    <section id="page-member" class="page-panel">
+      <div class="page-head">
+        <h2>Member — Register, Login, Videos & Complain Box</h2>
+        <button type="button" class="btn btn-gray" onclick="openPage('home')">← Home</button>
+      </div>
+
+      <div id="memberAuthFormsArea" class="grid-2">
+        <div class="box-card">
+          <h3>Member Register (Register गर्दा Services मा 25% Discount)</h3>
+          <label for="suOffice">1. Office Name (पहिलो प्राथमिकता — नभए Personal)</label>
+          <input type="text" id="suOffice" placeholder="Office Name लेख्नुहोस् (नभए Personal)" value="Personal" />
+
+          <label for="suName">2. Full Name (पूरा नाम)</label>
+          <input type="text" id="suName" placeholder="तपाईँको पूरा नाम" />
+
+          <label for="suPhone">3. Phone Number (फोन / WhatsApp नम्बर)</label>
+          <input type="tel" id="suPhone" placeholder="98XXXXXXXX" />
+
+          <label for="suPass">4. Password (पासवर्ड)</label>
+          <input type="password" id="suPass" placeholder="पासवर्ड बनाउनुहोस्" />
+
+          <div class="btn-row">
+            <button type="button" id="doRegisterBtn" class="btn btn-green">Register</button>
+          </div>
+
+          <div class="code-result" id="registerCodeBox">
+            <div>Register सफल भयो! Member Number जारी भयो:</div>
+            <div class="code-badge" id="generatedCodeText">ITZ-000000</div>
+            <div id="registerSummaryText"></div>
+            <div class="btn-row">
+              <button type="button" class="btn c-services" onclick="openPage('services')">Services मा 25% Discount हेर्नुहोस्</button>
+              <button type="button" class="btn c-technician" onclick="openPage('technician')">Technician मा जानुहोस्</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="box-card">
+          <h3>Member Login</h3>
+          <label for="mlPhone">दर्ता भएको Phone Number</label>
+          <input type="tel" id="mlPhone" placeholder="98XXXXXXXX" />
+
+          <label for="mlPass">Password (पासवर्ड)</label>
+          <input type="password" id="mlPass" placeholder="तपाईँको पासवर्ड" />
+
+          <div class="btn-row">
+            <button type="button" id="doMemberLoginBtn" class="btn btn-blue">Member Login</button>
+            <button type="button" id="toggleForgotBtn" class="btn btn-amber">Forgot Password?</button>
+          </div>
+
+          <div id="forgotPasswordPanel" class="forgot-box">
+            <h4>Forgot Password (नयाँ Password राख्नुहोस्)</h4>
+            <label for="fpPhone">दर्ता भएको Phone Number</label>
+            <input type="tel" id="fpPhone" placeholder="98XXXXXXXX" />
+
+            <label for="fpCode">Member Number (ऐच्छिक — जस्तै: ITZ-123456)</label>
+            <input type="text" id="fpCode" placeholder="याद छ भने Member Number लेख्नुहोस्" />
+
+            <label for="fpNewPass">नयाँ Password (New Password)</label>
+            <input type="password" id="fpNewPass" placeholder="नयाँ पासवर्ड लेख्नुहोस्" />
+
+            <div class="btn-row">
+              <button type="button" id="doResetPassBtn" class="btn btn-green">Reset Password</button>
+              <button type="button" id="cancelForgotBtn" class="btn btn-gray">बन्द गर्नुहोस्</button>
+            </div>
+
+            <div id="forgotStatusMsg" class="forgot-msg"></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="memberLoggedInPortal">
+        <div class="member-portal-head">
+          <div>
+            <h3 style="margin-bottom:2px; color:#14532d;">Member Dashboard — Videos & Complain Box</h3>
+            <div id="loggedInMemberInfoText" style="font-size:13px; font-weight:700; color:#15803d;"></div>
+          </div>
+          <div class="btn-row" style="margin-top:0;">
+            <button type="button" class="btn c-services" onclick="openPage('services')">Services (25% OFF)</button>
+            <button type="button" id="doMemberLogoutBtn" class="btn btn-red">Logout</button>
+          </div>
+        </div>
+
+        <div class="box-card" style="margin-bottom:16px;">
+          <h3>Member Videos (Admin बाट राखिएका भिडियोहरू)</h3>
+          <div class="videos-grid" id="memberVideosGrid"></div>
+        </div>
+
+        <div class="box-card" style="margin-bottom:16px;">
+          <h3>Complain Box (Staff ID अनिवार्य — Admin & Permitted Staff Reply गर्न मिल्ने)</h3>
+          <label for="complainStaffId">Staff ID Number (अनिवार्य — जस्तै: TECH-101)</label>
+          <input type="text" id="complainStaffId" placeholder="Staff ID Number लेख्नुहोस्..." />
+
+          <div id="complainStaffDetailsCard" class="staff-lookup-card">
+            <div class="staff-lookup-inner">
+              <div class="staff-lookup-photo">
+                <img id="compStaffImg" src="" alt="Staff Photo" style="display:none;" onerror="this.style.display='none'; document.getElementById('compStaffFb').style.display='block';" />
+                <span id="compStaffFb">STAFF</span>
+              </div>
+              <div style="font-size:12px;">
+                <div style="font-weight:900; color:#0f3d7c; font-size:13.5px;" id="compStaffNameOut">-</div>
+                <div><strong>Staff ID:</strong> <span id="compStaffIdOut">-</span> | <strong>Role:</strong> <span id="compStaffRoleOut">-</span></div>
+                <div><strong>Join Date:</strong> <span id="compStaffJoinOut">-</span> | <strong>WhatsApp:</strong> <span id="compStaffWaOut">-</span></div>
+              </div>
+            </div>
+          </div>
+          <div id="complainStaffLookupMsg" style="margin-top:5px; font-size:12px; font-weight:700; color:#dc2626;"></div>
+
+          <label for="complainSubject">गुनासोको विषय (Subject)</label>
+          <input type="text" id="complainSubject" placeholder="जस्तै: CCTV क्यामेरा / नेटवर्किङ / सेवा ढिलाइ" />
+
+          <label for="complainMessage">विस्तृत गुनासो (Complain Details)</label>
+          <textarea id="complainMessage" placeholder="तपाईँको गुनासो वा समस्या यहाँ स्पष्ट लेख्नुहोस्..."></textarea>
+
+          <div class="btn-row">
+            <button type="button" id="sendComplainBtn" class="btn btn-red">Complain पठाउनुहोस्</button>
+          </div>
+          <div id="complainStatusMsg" style="margin-top:8px; font-size:12.5px; font-weight:700; color:#15803d;"></div>
+        </div>
+
+        <div class="box-card">
+          <h3>मेरा गुनासाहरू र Admin / Staff बाट आएको Reply</h3>
+          <table>
+            <thead>
+              <tr>
+                <th style="width:45px;">S.N.</th>
+                <th>Date / Staff ID</th>
+                <th>Subject & Complain</th>
+                <th>Admin / Staff Reply</th>
+              </tr>
+            </thead>
+            <tbody id="memberMyComplainsTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="status-strip" id="memberStatusBar">
+        अहिले तपाईं Register हुनुभएको छैन। Register गरेपछि Member Number पाइन्छ र Services मा <strong>25% Discount</strong> लागू हुन्छ।
+      </div>
+    </section>
+
+    <!-- 8. SEPARATE TECHNICIAN SECTION -->
+    <section id="page-technician" class="page-panel">
+      <div id="staffLoginCard" class="box-card no-print" style="max-width:540px; margin:0 auto;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <h3 style="margin-bottom:0;">Technician Staff Login</h3>
+          <button type="button" class="btn btn-gray" onclick="openPage('home')">← Home</button>
+        </div>
+        <p style="font-size:12px; color:#475569; margin-bottom:6px;">
+          Admin प्यानलबाट बनाइएको <strong>Staff ID</strong> र <strong>Password</strong> हालेर Login गर्नुहोस्।
+        </p>
+        <label for="staffLoginIdInput">Staff ID</label>
+        <input type="text" id="staffLoginIdInput" placeholder="Staff ID लेख्नुहोस्" />
+
+        <label for="staffLoginPwInput">Password</label>
+        <input type="password" id="staffLoginPwInput" placeholder="Password लेख्नुहोस्" />
+
+        <div class="btn-row">
+          <button type="button" id="doStaffLoginBtn" class="btn btn-green">Staff Login & Auto WhatsApp</button>
+        </div>
+        <div id="staffLoginMsg" style="margin-top:8px; font-size:12.5px; font-weight:700; color:#dc2626;"></div>
+      </div>
+
+      <div id="technicianWorkspace" style="display:none;">
+        <div class="status-strip" style="margin-top:0; margin-bottom:16px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+          <div id="activeStaffBanner"></div>
+          <div class="btn-row no-print" style="margin-top:0;">
+            <a id="activeStaffWaBtn" class="btn btn-green" href="https://wa.me/9779851314060" target="_blank" rel="noopener noreferrer">Staff WhatsApp Open</a>
+            <button type="button" id="doStaffLogoutBtn" class="btn btn-red">Staff Logout</button>
+            <button type="button" class="btn btn-gray" onclick="openPage('home')">← Home</button>
+          </div>
+        </div>
+
+        <div class="box-card no-print" style="margin-bottom:16px;">
+          <h3>Staff ID हालेर Staff Details हेर्नुहोस्</h3>
+          <div class="grid-2">
+            <div>
+              <label for="techLookupStaffIdInput">Staff ID Number हाल्नुहोस्</label>
+              <input type="text" id="techLookupStaffIdInput" placeholder="Staff ID Number लेख्नुहोस्..." />
+            </div>
+            <div style="display:flex; align-items:flex-end;">
+              <button type="button" id="techLookupStaffBtn" class="btn btn-blue">Staff Details हेर्नुहोस्</button>
+            </div>
+          </div>
+          <div id="techLookupStaffCard" class="staff-lookup-card">
+            <div class="staff-lookup-inner">
+              <div class="staff-lookup-photo">
+                <img id="techLookImg" src="" alt="Staff Photo" style="display:none;" onerror="this.style.display='none'; document.getElementById('techLookFb').style.display='block';" />
+                <span id="techLookFb">STAFF</span>
+              </div>
+              <div style="font-size:12.5px;">
+                <div style="font-weight:900; color:#0f3d7c; font-size:14px;" id="techLookNameOut">-</div>
+                <div><strong>Staff ID:</strong> <span id="techLookIdOut">-</span> | <strong>Role:</strong> <span id="techLookRoleOut">-</span></div>
+                <div><strong>Join Date:</strong> <span id="techLookJoinOut">-</span> | <strong>WhatsApp:</strong> <span id="techLookWaOut">-</span></div>
+              </div>
+            </div>
+          </div>
+          <div id="techLookupStaffMsg" style="margin-top:6px; font-size:12px; font-weight:700; color:#dc2626;"></div>
+        </div>
+
+        <div class="report-wrap">
+          <div class="no-print" style="font-weight:900; color:#0f3d7c; font-size:16px; margin-bottom:6px;">
+            Service Report बनाउनुहोस् — के-के काम गरियो त्यसको विवरण (Office वा Member Code हालेर Print & Admin Send)
+          </div>
+
+          <div class="no-print grid-2">
+            <div>
+              <label for="reportOfficeSelect">Office छान्नुहोस् (AMC Office वा Manual)</label>
+              <select id="reportOfficeSelect"></select>
+            </div>
+            <div>
+              <label for="manualCustomerNameInput">Office / Customer Name</label>
+              <input type="text" id="manualCustomerNameInput" placeholder="Office वा ग्राहकको नाम" />
+            </div>
+            <div>
+              <label for="customerUserIdInput">Member Code (दर्ता भएको Member ID)</label>
+              <input type="text" id="customerUserIdInput" placeholder="Member Code लेख्नुहोस्" />
+            </div>
+            <div>
+              <label for="manualCustomerPhoneInput">Phone Number</label>
+              <input type="tel" id="manualCustomerPhoneInput" placeholder="98XXXXXXXX" />
+            </div>
+            <div>
+              <label for="serviceReportTitleInput">Service Report शीर्षक / प्रकार</label>
+              <input type="text" id="serviceReportTitleInput" placeholder="जस्तै: CCTV Maintenance / Networking / AMC Visit" value="CCTV & IT Service Visit" />
+            </div>
+            <div>
+              <label for="serviceReportStatusInput">कामको अवस्था (Work Status)</label>
+              <select id="serviceReportStatusInput">
+                <option value="Completed">Completed (काम सम्पन्न)</option>
+                <option value="Partially Completed / Follow-up">Partially Completed / Follow-up</option>
+                <option value="Pending Parts / Observation">Pending Parts / Observation</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="no-print" style="margin-top:10px;">
+            <label for="workDoneDetailsInput">के-के काम गरियो त्यसको विवरण (Work Done Details)</label>
+            <textarea id="workDoneDetailsInput" placeholder="के-के काम गरियो त्यसको विस्तृत विवरण लेख्नुहोस्..."></textarea>
+          </div>
+
+          <div id="customerLookupNotice" class="no-print" style="margin-top:8px; font-size:12.5px; font-weight:700; color:#0f3d7c;">
+            Office वा Member Code भरेपछि Service Report को विवरण तुरुन्त अपडेट हुन्छ।
+          </div>
+
+          <div class="btn-row no-print">
+            <button type="button" id="createReportAndSendAdminBtn" class="btn btn-green">Service Report सेभ गर्नुहोस् & Admin लाई पठाउनुहोस्</button>
+          </div>
+
+          <div id="technicianReportMount"></div>
+        </div>
+
+        <div id="staffComplainPermissionBox" class="box-card no-print" style="display:none; margin-top:16px;">
+          <h3>Member Complains & Reply (Admin Permission द्वारा अनुमति प्राप्त Staff को लागि)</h3>
+          <table>
+            <thead>
+              <tr>
+                <th style="width:45px;">S.N.</th>
+                <th>Date / Staff ID</th>
+                <th>Member Code / Office</th>
+                <th>Subject, Complain & Replies</th>
+                <th style="width:230px;">Reply पठाउनुहोस्</th>
+              </tr>
+            </thead>
+            <tbody id="staffComplainsTableBody"></tbody>
+          </table>
+        </div>
+
+        <div id="staffReportsPermissionBox" class="box-card no-print" style="display:none; margin-top:16px;">
+          <h3>Saved Service Reports (Admin Permission द्वारा देखाइएको सूची)</h3>
+          <table>
+            <thead>
+              <tr>
+                <th style="width:45px;">S.N.</th>
+                <th>Report No / Date</th>
+                <th>Office / Member Code</th>
+                <th>Technician</th>
+                <th>के-के काम गरियो (Work Done)</th>
+              </tr>
+            </thead>
+            <tbody id="staffReportsTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- 9. SEPARATE ADMIN SECTION (/admin ONLY) -->
+    <section id="page-admin" class="page-panel">
+      <div class="page-head">
+        <h2>Admin Panel</h2>
+        <button type="button" class="btn btn-gray" onclick="openPage('home')">← Home</button>
+      </div>
+
+      <div class="box-card no-print" style="max-width:540px;">
+        <h3>Admin Login</h3>
+        <label for="adminLoginId">Admin ID</label>
+        <input type="text" id="adminLoginId" value="" placeholder="Admin ID" autocomplete="off" />
+
+        <label for="adminLoginPw">Password</label>
+        <input type="password" id="adminLoginPw" value="" placeholder="Password" autocomplete="new-password" />
+
+        <div class="btn-row">
+          <button type="button" id="adminLoginActionBtn" class="btn btn-blue">Login</button>
+          <button type="button" id="adminLogoutActionBtn" class="btn btn-red">Logout</button>
+        </div>
+        <div id="adminLoginStatus" style="margin-top:8px; font-size:12.5px; font-weight:700; color:#0f3d7c;"></div>
+      </div>
+
+      <div id="adminControlsArea" style="display:none; margin-top:18px;">
+        <div class="box-card no-print" style="margin-bottom:16px;">
+          <h3>Member Login Activity Log</h3>
+          <table>
+            <thead>
+              <tr>
+                <th style="width:45px;">S.N.</th>
+                <th>Login Date & Time</th>
+                <th>Member No</th>
+                <th>Office / Type</th>
+                <th>Member Name</th>
+                <th>Phone Number</th>
+              </tr>
+            </thead>
+            <tbody id="adminMemberLoginLogBody"></tbody>
+          </table>
+        </div>
+
+        <div class="box-card no-print" style="margin-bottom:16px;">
+          <h3>Member Complains & Admin Reply</h3>
+          <table>
+            <thead>
+              <tr>
+                <th style="width:45px;">S.N.</th>
+                <th>Date / Staff ID</th>
+                <th>Member Code / Office</th>
+                <th>Subject, Complain & Replies</th>
+                <th style="width:230px;">Admin Reply</th>
+              </tr>
+            </thead>
+            <tbody id="adminComplainsTableBody"></tbody>
+          </table>
+        </div>
+
+        <div class="box-card no-print" style="margin-bottom:16px;">
+          <h3>AMC गरेका Office हरूको Name List — थप्नुहोस् र हटाउनुहोस्</h3>
+          <div class="grid-2">
+            <div>
+              <label for="adminAmcOfficeName">Office Name (कार्यालयको नाम)</label>
+              <input type="text" id="adminAmcOfficeName" placeholder="Office Name लेख्नुहोस्" />
+            </div>
+            <div>
+              <label for="adminAmcLocation">Location (ठेगाना)</label>
+              <input type="text" id="adminAmcLocation" placeholder="ठेगाना लेख्नुहोस्" />
+            </div>
+            <div>
+              <label for="adminAmcPackage">AMC Package (सेवाको प्रकार)</label>
+              <input type="text" id="adminAmcPackage" placeholder="AMC Package लेख्नुहोस्" />
+            </div>
+            <div>
+              <label for="adminAmcStatus">Status</label>
+              <select id="adminAmcStatus">
+                <option value="Active AMC">Active AMC</option>
+                <option value="Renewed">Renewed</option>
+              </select>
+            </div>
+          </div>
+          <div class="btn-row">
+            <button type="button" id="addAmcOfficeBtn" class="btn btn-orange">+ AMC Office List मा थप्नुहोस्</button>
+          </div>
+          <div id="adminAmcMsg" style="margin-top:8px; font-size:12.5px; font-weight:700; color:#15803d;"></div>
+
+          <div style="margin-top:14px;">
+            <strong style="display:block; font-size:13px; color:#0f3d7c; margin-bottom:6px;">
+              AMC Office सूची व्यवस्थापन (हटाउन Delete थिच्नुहोस्):
+            </strong>
+            <table>
+              <thead>
+                <tr>
+                  <th style="width:45px;">S.N.</th>
+                  <th>Office Name</th>
+                  <th>Location</th>
+                  <th>AMC Package</th>
+                  <th>Status</th>
+                  <th style="width:95px;">Action</th>
+                </tr>
+              </thead>
+              <tbody id="adminAmcManageTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="box-card no-print" style="margin-bottom:16px;">
+          <h3>Member Login पेजको लागि Videos हाल्नुहोस् (Admin Videos)</h3>
+          <div class="grid-2">
+            <div>
+              <label for="adminVideoTitle">भिडियोको शीर्षक (Video Title)</label>
+              <input type="text" id="adminVideoTitle" placeholder="भिडियोको शीर्षक" />
+            </div>
+            <div>
+              <label for="adminVideoDesc">छोटो विवरण (Description)</label>
+              <input type="text" id="adminVideoDesc" placeholder="छोटो विवरण" />
+            </div>
+            <div>
+              <label for="adminVideoFile">डिभाइसबाट भिडियो फाइल छान्नुहोस् (MP4 / WebM)</label>
+              <input type="file" id="adminVideoFile" accept="video/*" />
+            </div>
+            <div>
+              <label for="adminVideoUrl">वा Video URL / YouTube लिङ्क राख्नुहोस्</label>
+              <input type="text" id="adminVideoUrl" placeholder="Video URL वा लिङ्क" />
+            </div>
+          </div>
+          <div class="btn-row">
+            <button type="button" id="addMemberVideoBtn" class="btn btn-green">+ Member Login मा Video थप्नुहोस्</button>
+          </div>
+          <div id="adminVideoAddMsg" style="margin-top:8px; font-size:12.5px; font-weight:700; color:#15803d;"></div>
+        </div>
+
+        <div class="box-card no-print" style="margin-bottom:16px;">
+          <h3>Website Header Logo Path / File (`logo.jpeg`)</h3>
+          <div class="grid-2">
+            <div>
+              <label for="logoPathInput">Logo File Name / URL</label>
+              <input type="text" id="logoPathInput" value="logo.jpeg" />
+            </div>
+            <div>
+              <label for="logoFilePicker">वा डिभाइसबाट Logo फाइल छान्नुहोस्</label>
+              <input type="file" id="logoFilePicker" accept="image/*" />
+            </div>
+          </div>
+          <div class="btn-row">
+            <button type="button" id="applyLogoPathBtn" class="btn btn-blue">Logo लागू गर्नुहोस्</button>
+          </div>
+        </div>
+
+        <div class="box-card no-print">
+          <h3>Technician Staff को ID, Password, Photo, ID Card Frame र Permission बनाउनुहोस्</h3>
+          <div class="grid-2">
+            <div>
+              <label for="createStaffName">Technician को नाम</label>
+              <input type="text" id="createStaffName" placeholder="Technician को पूरा नाम" />
+            </div>
+            <div>
+              <label for="createStaffRole">पद / भूमिका</label>
+              <input type="text" id="createStaffRole" value="Technician" />
+            </div>
+            <div>
+              <label for="createStaffId">नयाँ Staff ID</label>
+              <input type="text" id="createStaffId" placeholder="नयाँ Staff ID" />
+            </div>
+            <div>
+              <label for="createStaffPass">नयाँ Staff Password</label>
+              <input type="text" id="createStaffPass" placeholder="Staff Login Password" />
+            </div>
+            <div>
+              <label for="createStaffWhatsapp">Staff WhatsApp Number</label>
+              <input type="tel" id="createStaffWhatsapp" placeholder="98XXXXXXXX" />
+            </div>
+            <div>
+              <label for="createStaffPhotoUrl">Technician Photo (फाइल नाम वा URL)</label>
+              <input type="text" id="createStaffPhotoUrl" placeholder="Photo फाइल नाम वा URL" />
+            </div>
+            <div>
+              <label for="createStaffPhotoFile">वा डिभाइसबाट Technician Photo छान्नुहोस्</label>
+              <input type="file" id="createStaffPhotoFile" accept="image/*" />
+            </div>
+          </div>
+
+          <div class="perm-box">
+            <label class="perm-check">
+              <input type="checkbox" id="permCanViewComplain" />
+              <span>Complain हेर्ने Permission (View Complains)</span>
+            </label>
+            <label class="perm-check">
+              <input type="checkbox" id="permCanViewServiceReport" checked />
+              <span>Service Report हेर्ने Permission (View Service Reports)</span>
+            </label>
+          </div>
+
+          <div class="btn-row">
+            <button type="button" id="saveNewStaffCredBtn" class="btn btn-green">+ Staff ID, Permissions & ID Card बनाउनुहोस्</button>
+          </div>
+          <div id="adminStaffCreateMsg" style="margin-top:8px; font-size:12.5px; font-weight:700; color:#15803d;"></div>
+
+          <div style="margin-top:14px;">
+            <strong style="display:block; font-size:13px; color:#0f3d7c; margin-bottom:6px;">
+              बनेका Staff ID र Permissions व्यवस्थापन:
+            </strong>
+            <table>
+              <thead>
+                <tr>
+                  <th style="width:45px;">S.N.</th>
+                  <th>Staff ID & Name</th>
+                  <th>WhatsApp</th>
+                  <th>Complain Permission</th>
+                  <th>Service Report Permission</th>
+                </tr>
+              </thead>
+              <tbody id="adminStaffPermTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="box-card" style="margin-top:16px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+            <h3 style="margin-bottom:0;">Staff ID Card Frame (Auto Same-Day Join Date)</h3>
+            <button type="button" class="btn btn-blue no-print" onclick="window.print()">Print Staff ID Cards</button>
+          </div>
+          <div class="id-cards-grid" id="adminStaffIdCardsGrid"></div>
+        </div>
+
+        <div id="adminReportMount" class="report-wrap"></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- MASTER SERVICE REPORT PRINTABLE / SHAREABLE CARD -->
+  <div id="masterReportContainer" style="display:none;">
+    <div class="small-report" id="masterSmallReport">
+      <div class="report-head">
+        <div style="font-size:15px; font-weight:900; color:#0f3d7c;">IT ZONE NEPAL</div>
+        <div style="font-size:10.5px;">Suryabinayak-2, Bhaktapur & New Road, Kathmandu</div>
+        <div style="font-size:10.5px;">Tel: 9851314060</div>
+        <span class="report-tag">SERVICE REPORT & WORK DONE STATEMENT</span>
+      </div>
+
+      <div class="report-tech-bar">
+        <div class="report-tech-photo">
+          <img id="repTechImg" src="" alt="Technician Photo" style="display:none;" onerror="this.style.display='none'; document.getElementById('repTechFb').style.display='block';" />
+          <span id="repTechFb">TECHNICIAN</span>
+        </div>
+        <div>
+          <div><strong>Technician:</strong> <span id="repTechNameOut">Technician</span> (<span id="repTechIdOut">-</span>)</div>
+          <div style="color:#475569;"><span id="repTechRoleOut">Technician</span> | WA: <span id="repTechWaOut">9851314060</span></div>
+        </div>
+      </div>
+
+      <div class="report-meta">
+        <div>
+          <div><strong>Report No:</strong> <span id="repNoOut">SR-101</span></div>
+          <div><strong>Office / Customer:</strong> <span id="repOfficeOut">Customer</span></div>
+          <div><strong>Member Code:</strong> <span id="repCodeOut">-</span></div>
+          <div><strong>Report Title:</strong> <span id="repTitleOut">CCTV & IT Service Visit</span></div>
+        </div>
+        <div style="text-align:right;">
+          <div><strong>Date:</strong> <span id="repDateOut">2026-11-24</span></div>
+          <div><strong>Phone:</strong> <span id="repPhoneOut">-</span></div>
+          <div><strong>Status:</strong> <span id="repStatusOut" style="font-weight:800; color:#15803d;">Completed</span></div>
+        </div>
+      </div>
+
+      <div>
+        <strong style="color:#0f3d7c; font-size:12px;">के-के काम गरियो त्यसको विवरण (Work Done Details):</strong>
+        <div class="work-detail-box" id="repWorkDoneOut">विवरण यहाँ देखिन्छ।</div>
+      </div>
+
+      <div id="reportAdminSendStatus" class="no-print" style="margin-top:8px; font-size:11.5px; font-weight:700; color:#15803d; text-align:center;"></div>
+
+      <div class="btn-row no-print" style="justify-content:center; margin-top:12px;">
+        <button type="button" id="sendReportCopyToAdminBtn" class="btn btn-green">Admin लाई एक कपी पठाउनुहोस्</button>
+        <button type="button" id="printReportBtn" class="btn btn-blue">Print Service Report</button>
+        <a id="waReportCopyLink" class="btn btn-amber" href="https://wa.me/9779851314060" target="_blank" rel="noopener noreferrer">
+          WhatsApp (9851314060) Copy
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="ticker">
+    IT Zone Nepal — Member Register गर्दा Services मा 25% Discount | AMC & IT Support: 9851314060
+  </div>
+
+  <footer>
+    © 2026 IT Zone Nepal | Phone/WhatsApp: 9851314060
+  </footer>
+
+  <script>
+    var membersList = [];
+    var memberLoginLogs = [];
+    var complainsList = [];
+    var serviceReportsList = [];
+    var currentMember = null;
+    var loggedInStaff = null;
+    var reportCounter = 101;
+    var latestWaUrl = "https://wa.me/9779851314060";
+    var uploadedStaffPhotoDataUrl = "";
+    var uploadedAdminVideoDataUrl = "";
+    var ADMIN_WHATSAPP_RAW = "9851314060";
+
+    var staffAccounts = [];
+
+    var amcOfficesList = [
+      { name: "Bhaktapur Corporate Office", location: "Suryabinayak-2, Bhaktapur", pkg: "Complete IT, Networking & CCTV AMC", status: "Active AMC" },
+      { name: "New Road Commercial Complex", location: "New Road, Kathmandu", pkg: "CCTV Surveillance & DVR/NVR AMC", status: "Active AMC" },
+      { name: "Valley Saving & Credit Co-operative Ltd.", location: "Bhaktapur", pkg: "Computer Hardware, Printer & LAN AMC", status: "Active AMC" },
+      { name: "Everest Educational Academy", location: "Kathmandu", pkg: "Computer Lab, Wi-Fi & CCTV AMC", status: "Active AMC" }
+    ];
+
+    var memberVideosList = [
+      {
+        title: "IT Zone Nepal — CCTV & Networking Overview",
+        desc: "Admin बाट थपिएको आधिकारिक सदस्य भिडियो (नयाँ भिडियो Admin प्यानलबाट थप्न सक्नुहुन्छ)।",
+        src: ""
+      }
+    ];
+
+    function isAdminRouteActive() {
+      var p = String(window.location.pathname || "").toLowerCase();
+      var h = String(window.location.hash || "").toLowerCase();
+      var s = String(window.location.search || "").toLowerCase();
+      return (
+        p === "/admin" ||
+        p.indexOf("/admin/") !== -1 ||
+        p.slice(-6) === "/admin" ||
+        h === "#/admin" ||
+        h === "#admin" ||
+        s.indexOf("admin") !== -1
+      );
+    }
+
+    function getTodayDateStr() {
+      var now = new Date();
+      var y = now.getFullYear();
+      var m = String(now.getMonth() + 1).padStart(2, "0");
+      var d = String(now.getDate()).padStart(2, "0");
+      return y + "-" + m + "-" + d;
+    }
+
+    function getNowDateTimeStr() {
+      var now = new Date();
+      var y = now.getFullYear();
+      var m = String(now.getMonth() + 1).padStart(2, "0");
+      var d = String(now.getDate()).padStart(2, "0");
+      var hh = String(now.getHours()).padStart(2, "0");
+      var mm = String(now.getMinutes()).padStart(2, "0");
+      var ss = String(now.getSeconds()).padStart(2, "0");
+      return y + "-" + m + "-" + d + " " + hh + ":" + mm + ":" + ss;
+    }
+
+    function recordMemberLogin(memberObj) {
+      memberLoginLogs.unshift({
+        loginAt: getNowDateTimeStr(),
+        code: memberObj.code,
+        office: memberObj.office || "Personal",
+        name: memberObj.name,
+        phone: memberObj.phone
+      });
+      renderAdminMemberLoginLog();
+    }
+
+    function renderAdminMemberLoginLog() {
+      var tbody = document.getElementById("adminMemberLoginLogBody");
+      if (!tbody) return;
+      tbody.innerHTML = "";
+
+      if (memberLoginLogs.length === 0) {
+        var tr = document.createElement("tr");
+        var td = document.createElement("td");
+        td.colSpan = 6;
+        td.style.cssText = "text-align:center; color:#64748b; padding:10px;";
+        td.textContent = "अहिलेसम्म कुनै Member ले Login गरेको रेकर्ड छैन।";
+        tr.appendChild(td);
+        tbody.appendChild(tr);
+        return;
+      }
+
+      for (var i = 0; i < memberLoginLogs.length; i++) {
+        var item = memberLoginLogs[i];
+        var row = document.createElement("tr");
+        row.innerHTML =
+          "<td style='font-weight:700;'>" + (i + 1) + "</td>" +
+          "<td><strong>" + item.loginAt + "</strong></td>" +
+          "<td><strong style='color:#0f3d7c;'>" + item.code + "</strong></td>" +
+          "<td>" + item.office + "</td>" +
+          "<td>" + item.name + "</td>" +
+          "<td>" + item.phone + "</td>";
+        tbody.appendChild(row);
+      }
+    }
+
+    function formatWaLink(phoneRaw, messageText) {
+      var digits = String(phoneRaw || "").replace(/\D/g, "");
+      if (!digits) digits = ADMIN_WHATSAPP_RAW;
+      if (digits.length === 10 && digits.indexOf("98") === 0) {
+        digits = "977" + digits;
+      } else if (digits.indexOf("977") !== 0) {
+        digits = "977" + digits;
+      }
+      return "https://wa.me/" + digits + "?text=" + encodeURIComponent(messageText || "");
+    }
+
+    function findStaffById(staffIdRaw) {
+      var clean = String(staffIdRaw || "").trim().toUpperCase();
+      if (!clean) return null;
+      for (var i = 0; i < staffAccounts.length; i++) {
+        if (staffAccounts[i].id.toUpperCase() === clean) {
+          return staffAccounts[i];
+        }
+      }
+      return null;
+    }
+
+    function syncComplainStaffLookup() {
+      var inputEl = document.getElementById("complainStaffId");
+      var cardEl = document.getElementById("complainStaffDetailsCard");
+      var msgEl = document.getElementById("complainStaffLookupMsg");
+      if (!inputEl || !cardEl || !msgEl) return;
+
+      var val = inputEl.value.trim();
+      if (!val) {
+        cardEl.style.display = "none";
+        msgEl.style.color = "#dc2626";
+        msgEl.textContent = "गुनासो पठाउन Staff ID Number अनिवार्य छ।";
+        return;
+      }
+
+      var found = findStaffById(val);
+      if (found) {
+        cardEl.style.display = "block";
+        msgEl.style.color = "#15803d";
+        msgEl.textContent = "Staff ID भेटियो — Staff Details तल देखाइएको छ।";
+        document.getElementById("compStaffNameOut").textContent = found.name;
+        document.getElementById("compStaffIdOut").textContent = found.id;
+        document.getElementById("compStaffRoleOut").textContent = found.role;
+        document.getElementById("compStaffJoinOut").textContent = found.joinDate;
+        document.getElementById("compStaffWaOut").textContent = found.whatsapp || "9851314060";
+
+        var img = document.getElementById("compStaffImg");
+        var fb = document.getElementById("compStaffFb");
+        if (found.photo) {
+          img.src = found.photo;
+          img.style.display = "block";
+          fb.style.display = "none";
+        } else {
+          img.style.display = "none";
+          fb.style.display = "block";
+        }
+      } else {
+        cardEl.style.display = "none";
+        msgEl.style.color = "#dc2626";
+        msgEl.textContent = "Staff ID '" + val.toUpperCase() + "' भेटिएन — सही Staff ID हाल्नुहोस्।";
+      }
+    }
+
+    function lookupStaffDetailsForTech() {
+      var idVal = document.getElementById("techLookupStaffIdInput").value.trim();
+      var cardEl = document.getElementById("techLookupStaffCard");
+      var msgEl = document.getElementById("techLookupStaffMsg");
+
+      if (!idVal) {
+        cardEl.style.display = "none";
+        msgEl.style.color = "#dc2626";
+        msgEl.textContent = "कृपया Staff ID Number लेख्नुहोस्।";
+        return;
+      }
+
+      var st = findStaffById(idVal);
+      if (!st) {
+        cardEl.style.display = "none";
+        msgEl.style.color = "#dc2626";
+        msgEl.textContent = "Staff ID '" + idVal.toUpperCase() + "' फेला परेन।";
+        return;
+      }
+
+      msgEl.style.color = "#15803d";
+      msgEl.textContent = "Staff Details भेटियो:";
+      cardEl.style.display = "block";
+      document.getElementById("techLookNameOut").textContent = st.name;
+      document.getElementById("techLookIdOut").textContent = st.id;
+      document.getElementById("techLookRoleOut").textContent = st.role;
+      document.getElementById("techLookJoinOut").textContent = st.joinDate;
+      document.getElementById("techLookWaOut").textContent = st.whatsapp || "9851314060";
+
+      var img = document.getElementById("techLookImg");
+      var fb = document.getElementById("techLookFb");
+      if (st.photo) {
+        img.src = st.photo;
+        img.style.display = "block";
+        fb.style.display = "none";
+      } else {
+        img.style.display = "none";
+        fb.style.display = "block";
+      }
+    }
+
+    function addReplyToComplain(complainIdx, replyTextRaw, replierLabel) {
+      var text = String(replyTextRaw || "").trim();
+      if (!text) return;
+      var comp = complainsList[complainIdx];
+      if (!comp) return;
+      if (!comp.replies) comp.replies = [];
+      comp.replies.push({
+        by: replierLabel,
+        date: getTodayDateStr(),
+        message: text
+      });
+      renderAllComplainViews();
+    }
+
+    function buildRepliesHtml(comp) {
+      if (!comp.replies || comp.replies.length === 0) {
+        return "<div style='color:#64748b; font-size:11px; margin-top:5px;'>अहिलेसम्म कुनै Reply आएको छैन।</div>";
+      }
+      var html = "";
+      for (var i = 0; i < comp.replies.length; i++) {
+        var r = comp.replies[i];
+        html += "<div class='reply-thread'><strong>" + r.by + "</strong> (" + r.date + "):<br/>" + r.message + "</div>";
+      }
+      return html;
+    }
+
+    function renderAdminComplainsList() {
+      var tbody = document.getElementById("adminComplainsTableBody");
+      if (!tbody) return;
+      tbody.innerHTML = "";
+
+      if (complainsList.length === 0) {
+        var tr = document.createElement("tr");
+        var td = document.createElement("td");
+        td.colSpan = 5;
+        td.style.cssText = "text-align:center; color:#64748b; padding:10px;";
+        td.textContent = "अहिले कुनै Complain आएको छैन।";
+        tr.appendChild(td);
+        tbody.appendChild(tr);
+        return;
+      }
+
+      for (var i = 0; i < complainsList.length; i++) {
+        var c = complainsList[i];
+        var trRow = document.createElement("tr");
+
+        var tdSn = document.createElement("td");
+        tdSn.style.fontWeight = "700";
+        tdSn.textContent = String(i + 1);
+
+        var tdMeta = document.createElement("td");
+        tdMeta.innerHTML = c.date + "<br/>Staff ID: <strong style='color:#0f3d7c;'>" + c.staffId + "</strong> (" + c.staffName + ")";
+
+        var tdMem = document.createElement("td");
+        tdMem.innerHTML = "<strong>" + c.memberCode + "</strong><br/>" + c.office + "<br/><span style='color:#475569;'>" + c.memberName + " (" + c.phone + ")</span>";
+
+        var tdBody = document.createElement("td");
+        tdBody.innerHTML = "<strong>" + c.subject + "</strong><br/>" + c.details + buildRepliesHtml(c);
+
+        var tdReply = document.createElement("td");
+        var inp = document.createElement("input");
+        inp.type = "text";
+        inp.placeholder = "Admin Reply लेख्नुहोस्...";
+
+        var btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "btn btn-green btn-sm";
+        btn.style.marginTop = "6px";
+        btn.textContent = "Admin Reply पठाउनुहोस्";
+
+        (function (idx, inputNode) {
+          btn.onclick = function () {
+            if (!inputNode.value.trim()) {
+              alert("कृपया Reply लेख्नुहोस्।");
+              return;
+            }
+            addReplyToComplain(idx, inputNode.value, "Admin");
+            inputNode.value = "";
+          };
+        })(i, inp);
+
+        tdReply.appendChild(inp);
+        tdReply.appendChild(btn);
+
+        trRow.appendChild(tdSn);
+        trRow.appendChild(tdMeta);
+        trRow.appendChild(tdMem);
+        trRow.appendChild(tdBody);
+        trRow.appendChild(tdReply);
+        tbody.appendChild(trRow);
+      }
+    }
+
+    function renderStaffComplainsList() {
+      var tbody = document.getElementById("staffComplainsTableBody");
+      if (!tbody) return;
+      tbody.innerHTML = "";
+
+      if (complainsList.length === 0) {
+        var tr = document.createElement("tr");
+        var td = document.createElement("td");
+        td.colSpan = 5;
+        td.style.cssText = "text-align:center; color:#64748b; padding:10px;";
+        td.textContent = "अहिले कुनै Member Complain आएको छैन।";
+        tr.appendChild(td);
+        tbody.appendChild(tr);
+        return;
+      }
+
+      for (var i = 0; i < complainsList.length; i++) {
+        var c = complainsList[i];
+        var trRow = document.createElement("tr");
+
+        var tdSn = document.createElement("td");
+        tdSn.style.fontWeight = "700";
+        tdSn.textContent = String(i + 1);
+
+        var tdMeta = document.createElement("td");
+        tdMeta.innerHTML = c.date + "<br/>Staff ID: <strong style='color:#0f3d7c;'>" + c.staffId + "</strong> (" + c.staffName + ")";
+
+        var tdMem = document.createElement("td");
+        tdMem.innerHTML = "<strong>" + c.memberCode + "</strong><br/>" + c.office + "<br/><span style='color:#475569;'>" + c.memberName + " (" + c.phone + ")</span>";
+
+        var tdBody = document.createElement("td");
+        tdBody.innerHTML = "<strong>" + c.subject + "</strong><br/>" + c.details + buildRepliesHtml(c);
+
+        var tdReply = document.createElement("td");
+        var inp = document.createElement("input");
+        inp.type = "text";
+        inp.placeholder = "Staff Reply लेख्नुहोस्...";
+
+        var btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "btn btn-blue btn-sm";
+        btn.style.marginTop = "6px";
+        btn.textContent = "Staff Reply पठाउनुहोस्";
+
+        (function (idx, inputNode) {
+          btn.onclick = function () {
+            if (!inputNode.value.trim()) {
+              alert("कृपया Reply लेख्नुहोस्।");
+              return;
+            }
+            var staffLabel = loggedInStaff ? ("Staff (" + loggedInStaff.name + " - " + loggedInStaff.id + ")") : "Staff";
+            addReplyToComplain(idx, inputNode.value, staffLabel);
+            inputNode.value = "";
+          };
+        })(i, inp);
+
+        tdReply.appendChild(inp);
+        tdReply.appendChild(btn);
+
+        trRow.appendChild(tdSn);
+        trRow.appendChild(tdMeta);
+        trRow.appendChild(tdMem);
+        trRow.appendChild(tdBody);
+        trRow.appendChild(tdReply);
+        tbody.appendChild(trRow);
+      }
+    }
+
+    function renderMemberMyComplainsList() {
+      var tbody = document.getElementById("memberMyComplainsTableBody");
+      if (!tbody) return;
+      tbody.innerHTML = "";
+
+      if (complainsList.length === 0) {
+        var tr = document.createElement("tr");
+        var td = document.createElement("td");
+        td.colSpan = 4;
+        td.style.cssText = "text-align:center; color:#64748b; padding:10px;";
+        td.textContent = "तपाईँले पठाएको गुनासो यहाँ देखिन्छ।";
+        tr.appendChild(td);
+        tbody.appendChild(tr);
+        return;
+      }
+
+      for (var i = 0; i < complainsList.length; i++) {
+        var c = complainsList[i];
+        var tr = document.createElement("tr");
+        tr.innerHTML =
+          "<td style='font-weight:700;'>" + (i + 1) + "</td>" +
+          "<td>" + c.date + "<br/>Staff ID: <strong>" + c.staffId + "</strong> (" + c.staffName + ")</td>" +
+          "<td><strong>" + c.subject + "</strong><br/>" + c.details + "</td>" +
+          "<td>" + buildRepliesHtml(c) + "</td>";
+        tbody.appendChild(tr);
+      }
+    }
+
+    function renderAllComplainViews() {
+      renderAdminComplainsList();
+      renderMemberMyComplainsList();
+      if (loggedInStaff && loggedInStaff.canViewComplain) {
+        renderStaffComplainsList();
+      }
+    }
+
+    function syncReportOfficeDropdown() {
+      var sel = document.getElementById("reportOfficeSelect");
+      if (!sel) return;
+      var prevVal = sel.value;
+      sel.innerHTML = "";
+
+      var optCustom = document.createElement("option");
+      optCustom.value = "";
+      optCustom.textContent = "-- Manual Office / Customer Name लेख्नुहोस् --";
+      sel.appendChild(optCustom);
+
+      for (var i = 0; i < amcOfficesList.length; i++) {
+        var off = amcOfficesList[i];
+        var opt = document.createElement("option");
+        opt.value = off.name;
+        opt.textContent = off.name + " (" + off.location + ")";
+        if (prevVal === off.name) opt.selected = true;
+        sel.appendChild(opt);
+      }
+    }
+
+    function removeAmcOffice(idx) {
+      if (idx < 0 || idx >= amcOfficesList.length) return;
+      var removed = amcOfficesList[idx];
+      amcOfficesList.splice(idx, 1);
+      renderAmcOfficesTable();
+      renderAdminAmcManageTable();
+      syncReportOfficeDropdown();
+      var msg = document.getElementById("adminAmcMsg");
+      if (msg && removed) {
+        msg.style.color = "#dc2626";
+        msg.textContent = "Office '" + removed.name + "' AMC सूचीबाट हटाइयो।";
+      }
+    }
+
+    function renderAmcOfficesTable() {
+      var tbody = document.getElementById("amcOfficesTableBody");
+      if (!tbody) return;
+      tbody.innerHTML = "";
+
+      if (amcOfficesList.length === 0) {
+        var emptyTr = document.createElement("tr");
+        var emptyTd = document.createElement("td");
+        emptyTd.colSpan = 5;
+        emptyTd.style.cssText = "text-align:center; color:#64748b; padding:12px;";
+        emptyTd.textContent = "अहिले कुनै AMC Office सूचीमा छैन। Admin प्यानलबाट थप्न सक्नुहुन्छ।";
+        emptyTr.appendChild(emptyTd);
+        tbody.appendChild(emptyTr);
+        return;
+      }
+
+      for (var i = 0; i < amcOfficesList.length; i++) {
+        var off = amcOfficesList[i];
+        var tr = document.createElement("tr");
+
+        var tdSn = document.createElement("td");
+        tdSn.style.fontWeight = "700";
+        tdSn.textContent = String(i + 1);
+
+        var tdName = document.createElement("td");
+        tdName.style.fontWeight = "700";
+        tdName.style.color = "#0f3d7c";
+        tdName.textContent = off.name;
+
+        var tdLoc = document.createElement("td");
+        tdLoc.textContent = off.location;
+
+        var tdPkg = document.createElement("td");
+        tdPkg.textContent = off.pkg;
+
+        var tdSt = document.createElement("td");
+        var badge = document.createElement("span");
+        badge.className = "amc-badge";
+        badge.textContent = off.status || "Active AMC";
+        tdSt.appendChild(badge);
+
+        tr.appendChild(tdSn);
+        tr.appendChild(tdName);
+        tr.appendChild(tdLoc);
+        tr.appendChild(tdPkg);
+        tr.appendChild(tdSt);
+        tbody.appendChild(tr);
+      }
+    }
+
+    function renderAdminAmcManageTable() {
+      var tbody = document.getElementById("adminAmcManageTableBody");
+      if (!tbody) return;
+      tbody.innerHTML = "";
+
+      if (amcOfficesList.length === 0) {
+        var emptyTr = document.createElement("tr");
+        var emptyTd = document.createElement("td");
+        emptyTd.colSpan = 6;
+        emptyTd.style.cssText = "text-align:center; color:#64748b; padding:10px;";
+        emptyTd.textContent = "कुनै Office बाँकी छैन। माथिको फारमबाट नयाँ Office थप्नुहोस्।";
+        emptyTr.appendChild(emptyTd);
+        tbody.appendChild(emptyTr);
+        return;
+      }
+
+      for (var i = 0; i < amcOfficesList.length; i++) {
+        var off = amcOfficesList[i];
+        var tr = document.createElement("tr");
+
+        var tdSn = document.createElement("td");
+        tdSn.style.fontWeight = "700";
+        tdSn.textContent = String(i + 1);
+
+        var tdName = document.createElement("td");
+        tdName.style.fontWeight = "700";
+        tdName.style.color = "#0f3d7c";
+        tdName.textContent = off.name;
+
+        var tdLoc = document.createElement("td");
+        tdLoc.textContent = off.location;
+
+        var tdPkg = document.createElement("td");
+        tdPkg.textContent = off.pkg;
+
+        var tdSt = document.createElement("td");
+        tdSt.textContent = off.status || "Active AMC";
+
+        var tdAct = document.createElement("td");
+        var delBtn = document.createElement("button");
+        delBtn.type = "button";
+        delBtn.className = "btn btn-red btn-sm";
+        delBtn.textContent = "Delete";
+        (function (rowIdx) {
+          delBtn.onclick = function () {
+            removeAmcOffice(rowIdx);
+          };
+        })(i);
+        tdAct.appendChild(delBtn);
+
+        tr.appendChild(tdSn);
+        tr.appendChild(tdName);
+        tr.appendChild(tdLoc);
+        tr.appendChild(tdPkg);
+        tr.appendChild(tdSt);
+        tr.appendChild(tdAct);
+        tbody.appendChild(tr);
+      }
+    }
+
+    function toggleStaffPermission(staffIdx, permKey) {
+      var st = staffAccounts[staffIdx];
+      if (!st) return;
+      st[permKey] = !st[permKey];
+      if (loggedInStaff && loggedInStaff.id === st.id) {
+        loggedInStaff[permKey] = st[permKey];
+      }
+      renderAdminStaffPermTable();
+      syncStaffPermissionSections();
+    }
+
+    function renderAdminStaffPermTable() {
+      var tbody = document.getElementById("adminStaffPermTableBody");
+      if (!tbody) return;
+      tbody.innerHTML = "";
+
+      if (staffAccounts.length === 0) {
+        var emptyTr = document.createElement("tr");
+        var emptyTd = document.createElement("td");
+        emptyTd.colSpan = 5;
+        emptyTd.style.cssText = "text-align:center; color:#64748b; padding:10px;";
+        emptyTd.textContent = "कुनै Staff ID बनेको छैन। माथिबाट Staff ID बनाउनुहोस्।";
+        emptyTr.appendChild(emptyTd);
+        tbody.appendChild(emptyTr);
+        return;
+      }
+
+      for (var i = 0; i < staffAccounts.length; i++) {
+        var st = staffAccounts[i];
+        var tr = document.createElement("tr");
+
+        var tdSn = document.createElement("td");
+        tdSn.style.fontWeight = "700";
+        tdSn.textContent = String(i + 1);
+
+        var tdInfo = document.createElement("td");
+        tdInfo.innerHTML = "<strong style='color:#0f3d7c;'>" + st.id + "</strong> — " + st.name + " (" + st.role + ")";
+
+        var tdWa = document.createElement("td");
+        tdWa.textContent = st.whatsapp || "9851314060";
+
+        var tdComp = document.createElement("td");
+        var compBtn = document.createElement("button");
+        compBtn.type = "button";
+        compBtn.className = "btn btn-sm " + (st.canViewComplain ? "btn-green" : "btn-gray");
+        compBtn.textContent = st.canViewComplain ? "Allowed (Toggle)" : "Blocked (Toggle)";
+        (function (idx) {
+          compBtn.onclick = function () {
+            toggleStaffPermission(idx, "canViewComplain");
+          };
+        })(i);
+        tdComp.appendChild(compBtn);
+
+        var tdRep = document.createElement("td");
+        var repBtn = document.createElement("button");
+        repBtn.type = "button";
+        repBtn.className = "btn btn-sm " + (st.canViewServiceReport ? "btn-green" : "btn-gray");
+        repBtn.textContent = st.canViewServiceReport ? "Allowed (Toggle)" : "Blocked (Toggle)";
+        (function (idx) {
+          repBtn.onclick = function () {
+            toggleStaffPermission(idx, "canViewServiceReport");
+          };
+        })(i);
+        tdRep.appendChild(repBtn);
+
+        tr.appendChild(tdSn);
+        tr.appendChild(tdInfo);
+        tr.appendChild(tdWa);
+        tr.appendChild(tdComp);
+        tr.appendChild(tdRep);
+        tbody.appendChild(tr);
+      }
+    }
+
+    function renderStaffServiceReportsList() {
+      var tbody = document.getElementById("staffReportsTableBody");
+      if (!tbody) return;
+      tbody.innerHTML = "";
+
+      if (serviceReportsList.length === 0) {
+        var tr = document.createElement("tr");
+        var td = document.createElement("td");
+        td.colSpan = 5;
+        td.style.cssText = "text-align:center; color:#64748b; padding:10px;";
+        td.textContent = "अहिले कुनै Service Report सेभ भएको छैन।";
+        tr.appendChild(td);
+        tbody.appendChild(tr);
+        return;
+      }
+
+      for (var i = 0; i < serviceReportsList.length; i++) {
+        var r = serviceReportsList[i];
+        var row = document.createElement("tr");
+        row.innerHTML =
+          "<td style='font-weight:700;'>" + (i + 1) + "</td>" +
+          "<td><strong>" + r.reportNo + "</strong><br/>" + r.date + "</td>" +
+          "<td><strong>" + r.officeOrCustomer + "</strong><br/>Member: " + r.memberCode + "</td>" +
+          "<td>" + r.staffName + " (" + r.staffId + ")</td>" +
+          "<td><strong>" + r.title + "</strong> [" + r.status + "]<br/><span style='white-space:pre-line;'>" + r.workDone + "</span></td>";
+        tbody.appendChild(row);
+      }
+    }
+
+    function syncStaffPermissionSections() {
+      var compBox = document.getElementById("staffComplainPermissionBox");
+      var repBox = document.getElementById("staffReportsPermissionBox");
+      if (!compBox || !repBox) return;
+
+      if (!loggedInStaff) {
+        compBox.style.display = "none";
+        repBox.style.display = "none";
+        return;
+      }
+
+      if (loggedInStaff.canViewComplain) {
+        compBox.style.display = "block";
+        renderStaffComplainsList();
+      } else {
+        compBox.style.display = "none";
+      }
+
+      if (loggedInStaff.canViewServiceReport) {
+        repBox.style.display = "block";
+        renderStaffServiceReportsList();
+      } else {
+        repBox.style.display = "none";
+      }
+    }
+
+    function mountReportTo(targetId) {
+      var repEl = document.getElementById("masterSmallReport");
+      var mountEl = document.getElementById(targetId);
+      if (repEl && mountEl) {
+        mountEl.innerHTML = "";
+        mountEl.appendChild(repEl);
+      }
+    }
+
+    function openPage(key) {
+      if (key === "admin" && !isAdminRouteActive()) {
+        key = "home";
+      }
+
+      var panels = document.querySelectorAll(".page-panel");
+      for (var i = 0; i < panels.length; i++) {
+        panels[i].classList.remove("active");
+      }
+      var target = document.getElementById("page-" + key);
+      if (target) target.classList.add("active");
+
+      var buttons = document.querySelectorAll(".nav-btn[data-page]");
+      for (var j = 0; j < buttons.length; j++) {
+        if (buttons[j].getAttribute("data-page") === key) {
+          buttons[j].classList.add("active");
+        } else {
+          buttons[j].classList.remove("active");
+        }
+      }
+
+      if (key === "technician") {
+        document.body.classList.add("technician-mode");
+        syncReportOfficeDropdown();
+        mountReportTo("technicianReportMount");
+        syncTechnicalView();
+      } else {
+        document.body.classList.remove("technician-mode");
+        if (key === "admin") {
+          mountReportTo("adminReportMount");
+          renderAdminMemberLoginLog();
+          renderAdminAmcManageTable();
+          renderAdminStaffPermTable();
+          renderAdminComplainsList();
+        } else if (key === "home") {
+          renderHomeTechTeam();
+        } else if (key === "amc") {
+          renderAmcOfficesTable();
+        } else if (key === "member") {
+          syncMemberLoginPortal();
+        }
+      }
+      window.scrollTo(0, 0);
+    }
+
+    function getYouTubeEmbedUrl(urlStr) {
+      var u = String(urlStr || "").trim();
+      var m1 = u.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([A-Za-z0-9_-]{6,})/);
+      if (m1 && m1[1]) return "https://www.youtube.com/embed/" + m1[1];
+      return "";
+    }
+
+    function renderMemberVideos() {
+      var grid = document.getElementById("memberVideosGrid");
+      if (!grid) return;
+      grid.innerHTML = "";
+
+      for (var i = 0; i < memberVideosList.length; i++) {
+        var v = memberVideosList[i];
+        var card = document.createElement("div");
+        card.className = "video-card";
+
+        var ytEmbed = getYouTubeEmbedUrl(v.src);
+        if (ytEmbed) {
+          var ifr = document.createElement("iframe");
+          ifr.src = ytEmbed;
+          ifr.allowFullscreen = true;
+          card.appendChild(ifr);
+        } else if (v.src) {
+          var vid = document.createElement("video");
+          vid.controls = true;
+          vid.src = v.src;
+          card.appendChild(vid);
+        } else {
+          var ph = document.createElement("div");
+          ph.style.cssText = "height:175px; border-radius:8px; background:#0f172a; color:#e2e8f0; display:flex; align-items:center; justify-content:center; text-align:center; padding:12px; margin-bottom:8px; font-size:12.5px; font-weight:700;";
+          ph.textContent = "Admin प्यानलबाट भिडियो फाइल वा लिङ्क थप्नुहोस्";
+          card.appendChild(ph);
+        }
+
+        var tDiv = document.createElement("div");
+        tDiv.className = "video-card-title";
+        tDiv.textContent = v.title;
+
+        var dDiv = document.createElement("div");
+        dDiv.className = "video-card-desc";
+        dDiv.textContent = v.desc;
+
+        card.appendChild(tDiv);
+        card.appendChild(dDiv);
+        grid.appendChild(card);
+      }
+    }
+
+    function syncMemberLoginPortal() {
+      var authForms = document.getElementById("memberAuthFormsArea");
+      var portal = document.getElementById("memberLoggedInPortal");
+      var infoText = document.getElementById("loggedInMemberInfoText");
+
+      if (currentMember) {
+        authForms.style.display = "none";
+        portal.style.display = "block";
+        var priorityLabel = currentMember.office || "Personal";
+        infoText.textContent =
+          "सक्रिय Member: " + currentMember.name + " (" + priorityLabel + ") | Member No: " +
+          currentMember.code + " | Phone: " + currentMember.phone + " | Services मा 25% Discount";
+        renderMemberVideos();
+        renderMemberMyComplainsList();
+        syncComplainStaffLookup();
+      } else {
+        authForms.style.display = "grid";
+        portal.style.display = "none";
+      }
+    }
+
+    function createPhotoBox(photoSrc, altText, smallClass) {
+      var wrap = document.createElement("div");
+      wrap.className = smallClass;
+      var fb = document.createElement("span");
+      fb.innerHTML = "TECHNICIAN<br/>PHOTO";
+      if (photoSrc) {
+        var img = document.createElement("img");
+        img.src = photoSrc;
+        img.alt = altText || "Technician";
+        img.onerror = function () {
+          img.style.display = "none";
+          fb.style.display = "block";
+        };
+        fb.style.display = "none";
+        wrap.appendChild(img);
+      }
+      wrap.appendChild(fb);
+      return wrap;
+    }
+
+    function renderHomeTechTeam() {
+      var homeGrid = document.getElementById("homeTechTeamGrid");
+      if (!homeGrid) return;
+      homeGrid.innerHTML = "";
+
+      if (staffAccounts.length === 0) {
+        return;
+      }
+
+      for (var i = 0; i < staffAccounts.length; i++) {
+        var st = staffAccounts[i];
+        var card = document.createElement("div");
+        card.className = "home-tech-card";
+        card.appendChild(createPhotoBox(st.photo, st.name, "home-tech-photo"));
+
+        var nEl = document.createElement("div");
+        nEl.style.cssText = "font-size:16px; font-weight:900; color:#0f3d7c;";
+        nEl.textContent = st.name;
+
+        var rEl = document.createElement("div");
+        rEl.style.cssText = "font-size:12.5px; font-weight:700; color:#15803d;";
+        rEl.textContent = st.role;
+
+        var iEl = document.createElement("div");
+        iEl.style.cssText = "font-size:11.5px; color:#475569; margin-top:2px;";
+        iEl.textContent = "Staff ID: " + st.id;
+
+        card.appendChild(nEl);
+        card.appendChild(rEl);
+        card.appendChild(iEl);
+        homeGrid.appendChild(card);
+      }
+    }
+
+    function renderAdminStaffIdCards() {
+      var grid = document.getElementById("adminStaffIdCardsGrid");
+      if (!grid) return;
+      grid.innerHTML = "";
+
+      if (staffAccounts.length === 0) {
+        var emptyBox = document.createElement("div");
+        emptyBox.style.cssText = "font-size:13px; color:#475569; padding:10px;";
+        emptyBox.textContent = "अहिले कुनै Staff ID बनेको छैन। माथिको फारमबाट Staff ID बनाउनुहोस्।";
+        grid.appendChild(emptyBox);
+        return;
+      }
+
+      for (var i = 0; i < staffAccounts.length; i++) {
+        var st = staffAccounts[i];
+        var outer = document.createElement("div");
+        outer.className = "id-card-frame-outer";
+
+        var slot = document.createElement("div");
+        slot.className = "id-card-slot";
+        outer.appendChild(slot);
+
+        var card = document.createElement("div");
+        card.className = "staff-id-card";
+        card.innerHTML =
+          "<div class='id-card-top'>" +
+            "<div class='co-title'>IT ZONE NEPAL</div>" +
+            "<div class='co-sub'>STAFF IDENTITY CARD</div>" +
+          "</div>";
+
+        var body = document.createElement("div");
+        body.className = "id-card-body";
+        body.appendChild(createPhotoBox(st.photo, st.name, "id-card-photo-frame"));
+
+        var nameDiv = document.createElement("div");
+        nameDiv.className = "id-card-name";
+        nameDiv.textContent = st.name;
+
+        var roleDiv = document.createElement("div");
+        roleDiv.className = "id-card-role";
+        roleDiv.textContent = st.role;
+
+        var metaDiv = document.createElement("div");
+        metaDiv.className = "id-card-meta";
+        metaDiv.innerHTML =
+          "<div><strong>Staff ID:</strong> " + st.id + "</div>" +
+          "<div><strong>Join Date:</strong> <span style='color:#15803d; font-weight:800;'>" + st.joinDate + "</span></div>" +
+          "<div><strong>WhatsApp:</strong> " + (st.whatsapp || "9851314060") + "</div>" +
+          "<div><strong>Complain:</strong> " + (st.canViewComplain ? "Yes" : "No") + " | <strong>Report:</strong> " + (st.canViewServiceReport ? "Yes" : "No") + "</div>";
+
+        body.appendChild(nameDiv);
+        body.appendChild(roleDiv);
+        body.appendChild(metaDiv);
+
+        var foot = document.createElement("div");
+        foot.className = "id-card-foot";
+        foot.textContent = "Suryabinayak-2, Bhaktapur & New Road, Kathmandu | 9851314060";
+
+        card.appendChild(body);
+        card.appendChild(foot);
+        outer.appendChild(card);
+        grid.appendChild(outer);
+      }
+    }
+
+    function syncTechnicalView() {
+      var loginCard = document.getElementById("staffLoginCard");
+      var workspace = document.getElementById("technicianWorkspace");
+      var banner = document.getElementById("activeStaffBanner");
+      var staffWaBtn = document.getElementById("activeStaffWaBtn");
+
+      if (loggedInStaff) {
+        loginCard.style.display = "none";
+        workspace.style.display = "block";
+        var waNum = loggedInStaff.whatsapp || "9851314060";
+        var staffWaUrl = formatWaLink(
+          waNum,
+          "Namaste! IT Zone Nepal Technician (" + loggedInStaff.name + " - " + loggedInStaff.id + ") logged in."
+        );
+        staffWaBtn.href = staffWaUrl;
+        staffWaBtn.textContent = "Staff WhatsApp (" + waNum + ")";
+        banner.innerHTML =
+          "सक्रिय Technician: <strong>" + loggedInStaff.name +
+          "</strong> (ID: <strong>" + loggedInStaff.id +
+          "</strong>) | Join Date: <strong>" + loggedInStaff.joinDate +
+          "</strong> | Complain View: <strong>" + (loggedInStaff.canViewComplain ? "Allowed" : "No") +
+          "</strong> | Report View: <strong>" + (loggedInStaff.canViewServiceReport ? "Allowed" : "No") + "</strong>";
+        syncStaffPermissionSections();
+        lookupCustomerForReport();
+      } else {
+        loginCard.style.display = "block";
+        workspace.style.display = "none";
+      }
+    }
+
+    function updateMemberBadges() {
+      var banner = document.getElementById("serviceBanner");
+      var bar = document.getElementById("memberStatusBar");
+      var tags = document.querySelectorAll(".service-tag");
+
+      if (currentMember) {
+        var priorityLabel = currentMember.office || "Personal";
+        banner.className = "banner unlocked";
+        banner.innerHTML = "बधाई छ <strong>" + priorityLabel + "</strong> (" + currentMember.name + ", Member No: <strong>" + currentMember.code + "</strong>)! Member Register भएकोले Services मा <strong>25% Discount</strong> लागू भएको छ (AMC Service बाहेक)।";
+        bar.innerHTML = "सक्रिय Member: <strong>" + priorityLabel + "</strong> | Name: <strong>" + currentMember.name + "</strong> | Member No: <strong>" + currentMember.code + "</strong> (" + currentMember.phone + ") — Services मा <strong>25% Discount</strong>।";
+        for (var i = 0; i < tags.length; i++) {
+          tags[i].textContent = "25% Discount लागू भयो (" + priorityLabel + ")";
+          tags[i].classList.add("active");
+        }
+      } else {
+        banner.className = "banner locked";
+        banner.innerHTML = "Services मा <strong>25% Discount</strong> पाउन कृपया <strong>Member</strong> मा गएर <strong>Register</strong> (वा Login) गर्नुहोस्।";
+        bar.innerHTML = "अहिले तपाईं Register हुनुभएको छैन। Register गरेपछि Member Number पाइन्छ र Services मा <strong>25% Discount</strong> लागू हुन्छ।";
+        for (var j = 0; j < tags.length; j++) {
+          tags[j].textContent = "Register गर्दा 25% Discount";
+          tags[j].classList.remove("active");
+        }
+      }
+    }
+
+    function findRegisteredMemberByCode(enteredId) {
+      var clean = String(enteredId || "").trim().toUpperCase();
+      if (!clean) return null;
+      for (var i = 0; i < membersList.length; i++) {
+        if (membersList[i].code.toUpperCase() === clean) {
+          return membersList[i];
+        }
+      }
+      return null;
+    }
+
+    function lookupCustomerForReport() {
+      var selectedOffice = (document.getElementById("reportOfficeSelect").value || "").trim();
+      var manualName = (document.getElementById("manualCustomerNameInput").value || "").trim();
+      var enteredCode = (document.getElementById("customerUserIdInput").value || "").trim().toUpperCase();
+      var manualPhone = (document.getElementById("manualCustomerPhoneInput").value || "").trim();
+      var notice = document.getElementById("customerLookupNotice");
+
+      var matched = findRegisteredMemberByCode(enteredCode);
+      var resolvedOfficeOrName = manualName || selectedOffice || (matched ? ((matched.office || "Personal") + " - " + matched.name) : "Customer / Office");
+
+      if (matched) {
+        notice.style.color = "#15803d";
+        notice.textContent = "Member Code (" + matched.code + ") भेटियो — " + (matched.office || "Personal") + " (" + matched.name + ") को विवरण Service Report मा जोडिएको छ।";
+        document.getElementById("repCodeOut").textContent = matched.code;
+        document.getElementById("repPhoneOut").textContent = manualPhone || matched.phone;
+      } else {
+        notice.style.color = "#0f3d7c";
+        notice.textContent = enteredCode
+          ? "Member Code '" + enteredCode + "' भरिएको छ — Office/Customer विवरण सहित Service Report तयार हुन्छ।"
+          : "Office वा Member Code भरेपछि Service Report को विवरण तुरुन्त अपडेट हुन्छ।";
+        document.getElementById("repCodeOut").textContent = enteredCode || "-";
+        document.getElementById("repPhoneOut").textContent = manualPhone || "-";
+      }
+
+      document.getElementById("repOfficeOut").textContent = resolvedOfficeOrName;
+      refreshReportPreview();
+    }
+
+    function refreshReportPreview() {
+      var staffObj = loggedInStaff || { name: "Technician", id: "-", role: "Technician", whatsapp: "9851314060", photo: "" };
+      document.getElementById("repTechNameOut").textContent = staffObj.name;
+      document.getElementById("repTechIdOut").textContent = staffObj.id;
+      document.getElementById("repTechRoleOut").textContent = staffObj.role;
+      document.getElementById("repTechWaOut").textContent = staffObj.whatsapp || "9851314060";
+
+      var tImg = document.getElementById("repTechImg");
+      var tFb = document.getElementById("repTechFb");
+      if (staffObj.photo) {
+        tImg.src = staffObj.photo;
+        tImg.style.display = "block";
+        tFb.style.display = "none";
+      } else {
+        tImg.style.display = "none";
+        tFb.style.display = "block";
+      }
+
+      var today = getTodayDateStr();
+      var repNo = document.getElementById("repNoOut").textContent;
+      var repOffice = document.getElementById("repOfficeOut").textContent;
+      var repCode = document.getElementById("repCodeOut").textContent;
+      var repPhone = document.getElementById("repPhoneOut").textContent;
+      var repTitle = (document.getElementById("serviceReportTitleInput").value || "").trim() || "Service Visit Report";
+      var repStatus = (document.getElementById("serviceReportStatusInput").value || "").trim() || "Completed";
+      var workDoneText = (document.getElementById("workDoneDetailsInput").value || "").trim() || "कामको विवरण लेख्नुहोस्।";
+
+      document.getElementById("repDateOut").textContent = today;
+      document.getElementById("repTitleOut").textContent = repTitle;
+      document.getElementById("repStatusOut").textContent = repStatus;
+      document.getElementById("repWorkDoneOut").textContent = workDoneText;
+
+      var waCopyMsg =
+        "IT ZONE NEPAL - SERVICE REPORT FOR ADMIN\n" +
+        "Report No: " + repNo + " | Date: " + today + "\n" +
+        "Technician: " + staffObj.name + " (" + staffObj.id + " | WA: " + (staffObj.whatsapp || "") + ")\n" +
+        "Office / Customer: " + repOffice + "\n" +
+        "Member Code: " + repCode + " | Phone: " + repPhone + "\n" +
+        "Report Title: " + repTitle + " (" + repStatus + ")\n" +
+        "Work Done Details:\n" + workDoneText;
+
+      latestWaUrl = formatWaLink(ADMIN_WHATSAPP_RAW, waCopyMsg);
+      document.getElementById("waReportCopyLink").href = latestWaUrl;
+    }
+
+    function saveAndSendReportToAdmin() {
+      var staffObj = loggedInStaff || { name: "Technician", id: "-", role: "Technician", whatsapp: "9851314060" };
+      var today = getTodayDateStr();
+      var repOffice = document.getElementById("repOfficeOut").textContent;
+      var repCode = document.getElementById("repCodeOut").textContent;
+      var repPhone = document.getElementById("repPhoneOut").textContent;
+      var repTitle = (document.getElementById("serviceReportTitleInput").value || "").trim() || "Service Visit Report";
+      var repStatus = (document.getElementById("serviceReportStatusInput").value || "").trim() || "Completed";
+      var workDoneText = (document.getElementById("workDoneDetailsInput").value || "").trim();
+
+      if (!workDoneText) {
+        alert("कृपया के-के काम गरियो त्यसको विवरण (Work Done Details) लेख्नुहोस्।");
+        return;
+      }
+
+      reportCounter += 1;
+      var newRepNo = "SR-" + reportCounter;
+      document.getElementById("repNoOut").textContent = newRepNo;
+
+      serviceReportsList.unshift({
+        reportNo: newRepNo,
+        date: today,
+        officeOrCustomer: repOffice,
+        memberCode: repCode,
+        phone: repPhone,
+        title: repTitle,
+        status: repStatus,
+        workDone: workDoneText,
+        staffName: staffObj.name,
+        staffId: staffObj.id
+      });
+
+      refreshReportPreview();
+      if (loggedInStaff && loggedInStaff.canViewServiceReport) {
+        renderStaffServiceReportsList();
+      }
+
+      document.getElementById("reportAdminSendStatus").textContent =
+        "Service Report #" + newRepNo + " सेभ भयो — Admin WhatsApp (9851314060) मा पठाउन खोलिँदै छ...";
+      window.open(latestWaUrl, "_blank", "noopener,noreferrer");
+    }
+
+    function setSiteLogoSrc(srcVal) {
+      var imgs = document.querySelectorAll(".site-logo-img");
+      for (var i = 0; i < imgs.length; i++) {
+        imgs[i].style.display = "block";
+        imgs[i].src = srcVal;
+      }
+      document.querySelector(".brand-logo-fb").style.display = "none";
+    }
+
+    document.getElementById("addAmcOfficeBtn").onclick = function () {
+      var oName = (document.getElementById("adminAmcOfficeName").value || "").trim();
+      var oLoc = (document.getElementById("adminAmcLocation").value || "").trim() || "Kathmandu / Bhaktapur";
+      var oPkg = (document.getElementById("adminAmcPackage").value || "").trim() || "Complete IT & CCTV AMC";
+      var oSt = (document.getElementById("adminAmcStatus").value || "").trim() || "Active AMC";
+      var msg = document.getElementById("adminAmcMsg");
+
+      if (!oName) {
+        msg.style.color = "#dc2626";
+        msg.textContent = "कृपया Office Name लेख्नुहोस्।";
+        return;
+      }
+
+      amcOfficesList.push({ name: oName, location: oLoc, pkg: oPkg, status: oSt });
+      renderAmcOfficesTable();
+      renderAdminAmcManageTable();
+      syncReportOfficeDropdown();
+
+      msg.style.color = "#15803d";
+      msg.textContent = "Office '" + oName + "' AMC Office List मा थपियो।";
+
+      document.getElementById("adminAmcOfficeName").value = "";
+      document.getElementById("adminAmcLocation").value = "";
+      document.getElementById("adminAmcPackage").value = "";
+    };
+
+    document.getElementById("applyLogoPathBtn").onclick = function () {
+      var p = (document.getElementById("logoPathInput").value || "").trim() || "logo.jpeg";
+      setSiteLogoSrc(p);
+    };
+
+    document.getElementById("logoFilePicker").onchange = function () {
+      var file = this.files && this.files[0];
+      if (!file) return;
+      var reader = new FileReader();
+      reader.onload = function (ev) {
+        if (ev.target && ev.target.result) {
+          setSiteLogoSrc(ev.target.result);
+          document.getElementById("logoPathInput").value = file.name;
+        }
+      };
+      reader.readAsDataURL(file);
+    };
+
+    document.getElementById("adminVideoFile").onchange = function () {
+      var file = this.files && this.files[0];
+      if (!file) {
+        uploadedAdminVideoDataUrl = "";
+        return;
+      }
+      var reader = new FileReader();
+      reader.onload = function (ev) {
+        if (ev.target && ev.target.result) {
+          uploadedAdminVideoDataUrl = ev.target.result;
+          document.getElementById("adminVideoUrl").value = file.name;
+        }
+      };
+      reader.readAsDataURL(file);
+    };
+
+    document.getElementById("addMemberVideoBtn").onclick = function () {
+      var vTitle = (document.getElementById("adminVideoTitle").value || "").trim() || "IT Zone Nepal Member Video";
+      var vDesc = (document.getElementById("adminVideoDesc").value || "").trim() || "Admin बाट राखिएको भिडियो";
+      var vUrl = (document.getElementById("adminVideoUrl").value || "").trim();
+      var finalVideoSrc = uploadedAdminVideoDataUrl || vUrl;
+      var msg = document.getElementById("adminVideoAddMsg");
+
+      if (!finalVideoSrc) {
+        msg.style.color = "#dc2626";
+        msg.textContent = "कृपया भिडियो फाइल छान्नुहोस् वा Video URL/लिङ्क लेख्नुहोस्।";
+        return;
+      }
+
+      memberVideosList.unshift({ title: vTitle, desc: vDesc, src: finalVideoSrc });
+      renderMemberVideos();
+      msg.style.color = "#15803d";
+      msg.textContent = "भिडियो ('" + vTitle + "') Member Login पेजमा थपियो।";
+
+      uploadedAdminVideoDataUrl = "";
+      document.getElementById("adminVideoTitle").value = "";
+      document.getElementById("adminVideoDesc").value = "";
+      document.getElementById("adminVideoUrl").value = "";
+      document.getElementById("adminVideoFile").value = "";
+    };
+
+    document.getElementById("createStaffPhotoFile").onchange = function () {
+      var file = this.files && this.files[0];
+      if (!file) {
+        uploadedStaffPhotoDataUrl = "";
+        return;
+      }
+      var reader = new FileReader();
+      reader.onload = function (ev) {
+        if (ev.target && ev.target.result) {
+          uploadedStaffPhotoDataUrl = ev.target.result;
+          document.getElementById("createStaffPhotoUrl").value = file.name;
+        }
+      };
+      reader.readAsDataURL(file);
+    };
+
+    document.getElementById("doRegisterBtn").onclick = function () {
+      var officeVal = (document.getElementById("suOffice").value || "").trim() || "Personal";
+      var nameVal = (document.getElementById("suName").value || "").trim();
+      var phoneVal = (document.getElementById("suPhone").value || "").trim();
+      var passVal = (document.getElementById("suPass").value || "").trim();
+
+      if (!nameVal || !phoneVal || !passVal) {
+        alert("कृपया Name, Phone Number र Password भर्नुहोस्।");
+        return;
+      }
+
+      var newCode = "ITZ-" + String(Math.floor(100000 + Math.random() * 900000));
+      var regDate = getTodayDateStr();
+      var memberObj = { office: officeVal, name: nameVal, phone: phoneVal, pass: passVal, code: newCode, regDate: regDate };
+
+      membersList.push(memberObj);
+      currentMember = memberObj;
+      recordMemberLogin(memberObj);
+
+      document.getElementById("generatedCodeText").textContent = newCode;
+      document.getElementById("registerSummaryText").textContent =
+        "Office/Type: " + officeVal + " | Name: " + nameVal + " | Phone: " + phoneVal;
+      document.getElementById("registerCodeBox").style.display = "block";
+
+      document.getElementById("customerUserIdInput").value = newCode;
+      updateMemberBadges();
+      syncMemberLoginPortal();
+      lookupCustomerForReport();
+    };
+
+    document.getElementById("doMemberLoginBtn").onclick = function () {
+      var lPhone = (document.getElementById("mlPhone").value || "").trim();
+      var lPass = (document.getElementById("mlPass").value || "").trim();
+
+      if (!lPhone || !lPass) {
+        alert("कृपया Phone Number र Password लेख्नुहोस्।");
+        return;
+      }
+
+      for (var i = 0; i < membersList.length; i++) {
+        if (membersList[i].phone === lPhone && membersList[i].pass === lPass) {
+          currentMember = membersList[i];
+          recordMemberLogin(membersList[i]);
+          document.getElementById("customerUserIdInput").value = membersList[i].code;
+          updateMemberBadges();
+          syncMemberLoginPortal();
+          lookupCustomerForReport();
+          alert("Member Login सफल भयो! Member No: " + membersList[i].code);
+          return;
+        }
+      }
+      alert("Phone Number वा Password मिलेन।");
+    };
+
+    document.getElementById("complainStaffId").oninput = syncComplainStaffLookup;
+
+    document.getElementById("sendComplainBtn").onclick = function () {
+      var staffIdVal = (document.getElementById("complainStaffId").value || "").trim().toUpperCase();
+      var subj = (document.getElementById("complainSubject").value || "").trim();
+      var bodyMsg = (document.getElementById("complainMessage").value || "").trim();
+      var statusEl = document.getElementById("complainStatusMsg");
+
+      if (!staffIdVal) {
+        statusEl.style.color = "#dc2626";
+        statusEl.textContent = "कृपया Staff ID Number अनिवार्य भर्नुहोस्।";
+        return;
+      }
+
+      var matchedStaff = findStaffById(staffIdVal);
+      if (!matchedStaff) {
+        statusEl.style.color = "#dc2626";
+        statusEl.textContent = "Staff ID '" + staffIdVal + "' भेटिएन — सही Staff ID Number हाल्नुहोस्।";
+        return;
+      }
+
+      if (!bodyMsg) {
+        statusEl.style.color = "#dc2626";
+        statusEl.textContent = "कृपया आफ्नो Complain लेख्नुहोस्।";
+        return;
+      }
+
+      var mName = currentMember ? currentMember.name : "Member";
+      var mCode = currentMember ? currentMember.code : "-";
+      var mPhone = currentMember ? currentMember.phone : "-";
+      var mOffice = currentMember ? (currentMember.office || "Personal") : "Personal";
+      var todayStr = getTodayDateStr();
+      var subjClean = subj || "General Complain";
+
+      complainsList.unshift({
+        date: todayStr,
+        staffId: matchedStaff.id,
+        staffName: matchedStaff.name,
+        memberName: mName,
+        memberCode: mCode,
+        phone: mPhone,
+        office: mOffice,
+        subject: subjClean,
+        details: bodyMsg,
+        replies: []
+      });
+
+      renderAllComplainViews();
+
+      statusEl.style.color = "#15803d";
+      statusEl.textContent = "Complain सेभ भयो (Staff ID: " + matchedStaff.id + ")। Admin तथा अनुमति प्राप्त Staff ले यहाँबाट Reply दिन सक्छन्।";
+      document.getElementById("complainSubject").value = "";
+      document.getElementById("complainMessage").value = "";
+    };
+
+    document.getElementById("toggleForgotBtn").onclick = function () {
+      var fpPanel = document.getElementById("forgotPasswordPanel");
+      fpPanel.style.display = fpPanel.style.display === "block" ? "none" : "block";
+    };
+
+    document.getElementById("cancelForgotBtn").onclick = function () {
+      document.getElementById("forgotPasswordPanel").style.display = "none";
+    };
+
+    document.getElementById("doResetPassBtn").onclick = function () {
+      var rPhone = (document.getElementById("fpPhone").value || "").trim();
+      var rCode = (document.getElementById("fpCode").value || "").trim().toUpperCase();
+      var rNewPass = (document.getElementById("fpNewPass").value || "").trim();
+      var msgBox = document.getElementById("forgotStatusMsg");
+
+      if (!rPhone || !rNewPass) {
+        msgBox.style.color = "#dc2626";
+        msgBox.textContent = "Phone Number र नयाँ Password लेख्नुहोस्।";
+        return;
+      }
+
+      for (var i = 0; i < membersList.length; i++) {
+        var m = membersList[i];
+        if (m.phone === rPhone && (!rCode || m.code.toUpperCase() === rCode)) {
+          m.pass = rNewPass;
+          currentMember = m;
+          recordMemberLogin(m);
+          document.getElementById("mlPhone").value = m.phone;
+          document.getElementById("mlPass").value = rNewPass;
+          document.getElementById("fpNewPass").value = "";
+          document.getElementById("customerUserIdInput").value = m.code;
+          msgBox.style.color = "#15803d";
+          msgBox.textContent = "Password बदलियो (" + m.name + ")।";
+          updateMemberBadges();
+          syncMemberLoginPortal();
+          lookupCustomerForReport();
+          return;
+        }
+      }
+      msgBox.style.color = "#dc2626";
+      msgBox.textContent = "Member भेटिएन।";
+    };
+
+    document.getElementById("doMemberLogoutBtn").onclick = function () {
+      currentMember = null;
+      updateMemberBadges();
+      syncMemberLoginPortal();
+      lookupCustomerForReport();
+    };
+
+    document.getElementById("doStaffLoginBtn").onclick = function () {
+      var sId = (document.getElementById("staffLoginIdInput").value || "").trim().toUpperCase();
+      var sPw = (document.getElementById("staffLoginPwInput").value || "").trim();
+      var msg = document.getElementById("staffLoginMsg");
+
+      for (var i = 0; i < staffAccounts.length; i++) {
+        if (staffAccounts[i].id.toUpperCase() === sId && staffAccounts[i].pass === sPw) {
+          loggedInStaff = staffAccounts[i];
+          msg.textContent = "";
+          syncTechnicalView();
+          var autoStaffWaUrl = formatWaLink(
+            loggedInStaff.whatsapp || "9851314060",
+            "Namaste! IT Zone Nepal Technician (" + loggedInStaff.name + " - " + loggedInStaff.id + ") logged in."
+          );
+          window.open(autoStaffWaUrl, "_blank", "noopener,noreferrer");
+          return;
+        }
+      }
+      msg.style.color = "#dc2626";
+      msg.textContent = "गलत Staff ID वा Password!";
+    };
+
+    document.getElementById("doStaffLogoutBtn").onclick = function () {
+      loggedInStaff = null;
+      syncTechnicalView();
+    };
+
+    document.getElementById("techLookupStaffBtn").onclick = lookupStaffDetailsForTech;
+    document.getElementById("techLookupStaffIdInput").oninput = lookupStaffDetailsForTech;
+
+    document.getElementById("saveNewStaffCredBtn").onclick = function () {
+      var sName = (document.getElementById("createStaffName").value || "").trim();
+      var sRole = (document.getElementById("createStaffRole").value || "").trim() || "Technician";
+      var sId = (document.getElementById("createStaffId").value || "").trim().toUpperCase();
+      var sPw = (document.getElementById("createStaffPass").value || "").trim();
+      var sWa = (document.getElementById("createStaffWhatsapp").value || "").trim() || "9851314060";
+      var sPhotoUrl = (document.getElementById("createStaffPhotoUrl").value || "").trim();
+      var finalPhoto = uploadedStaffPhotoDataUrl || sPhotoUrl;
+      var canComp = !!document.getElementById("permCanViewComplain").checked;
+      var canRep = !!document.getElementById("permCanViewServiceReport").checked;
+      var autoJoinDate = getTodayDateStr();
+      var msg = document.getElementById("adminStaffCreateMsg");
+
+      if (!sName || !sId || !sPw) {
+        msg.style.color = "#dc2626";
+        msg.textContent = "कृपया नाम, Staff ID र Password भर्नुहोस्।";
+        return;
+      }
+
+      var updated = false;
+      for (var i = 0; i < staffAccounts.length; i++) {
+        if (staffAccounts[i].id.toUpperCase() === sId) {
+          staffAccounts[i].name = sName;
+          staffAccounts[i].role = sRole;
+          staffAccounts[i].pass = sPw;
+          staffAccounts[i].whatsapp = sWa;
+          staffAccounts[i].canViewComplain = canComp;
+          staffAccounts[i].canViewServiceReport = canRep;
+          if (finalPhoto) staffAccounts[i].photo = finalPhoto;
+          if (loggedInStaff && loggedInStaff.id.toUpperCase() === sId) loggedInStaff = staffAccounts[i];
+          updated = true;
+          break;
+        }
+      }
+
+      if (!updated) {
+        staffAccounts.push({
+          id: sId,
+          pass: sPw,
+          name: sName,
+          role: sRole,
+          whatsapp: sWa,
+          photo: finalPhoto,
+          joinDate: autoJoinDate,
+          canViewComplain: canComp,
+          canViewServiceReport: canRep
+        });
+      }
+
+      renderAdminStaffIdCards();
+      renderAdminStaffPermTable();
+      renderHomeTechTeam();
+      syncStaffPermissionSections();
+      syncComplainStaffLookup();
+      refreshReportPreview();
+
+      msg.style.color = "#15803d";
+      msg.textContent = "Staff ID (" + sId + ") र Permissions सेभ भयो।";
+
+      uploadedStaffPhotoDataUrl = "";
+      document.getElementById("createStaffName").value = "";
+      document.getElementById("createStaffId").value = "";
+      document.getElementById("createStaffPass").value = "";
+      document.getElementById("createStaffWhatsapp").value = "";
+      document.getElementById("createStaffPhotoUrl").value = "";
+      document.getElementById("createStaffPhotoFile").value = "";
+    };
+
+    document.getElementById("adminLoginActionBtn").onclick = function () {
+      var aid = (document.getElementById("adminLoginId").value || "").trim().toLowerCase();
+      var apw = (document.getElementById("adminLoginPw").value || "").trim();
+      var st = document.getElementById("adminLoginStatus");
+
+      if (aid === "admin" && apw === "itzone2026") {
+        document.getElementById("adminControlsArea").style.display = "block";
+        mountReportTo("adminReportMount");
+        renderAdminMemberLoginLog();
+        renderAdminAmcManageTable();
+        renderAdminStaffPermTable();
+        renderAdminComplainsList();
+        st.style.color = "#15803d";
+        st.textContent = "Login सफल भयो।";
+        refreshReportPreview();
+      } else {
+        st.style.color = "#dc2626";
+        st.textContent = "गलत Admin ID वा Password!";
+      }
+    };
+
+    document.getElementById("adminLogoutActionBtn").onclick = function () {
+      document.getElementById("adminControlsArea").style.display = "none";
+      document.getElementById("adminLoginId").value = "";
+      document.getElementById("adminLoginPw").value = "";
+      var st = document.getElementById("adminLoginStatus");
+      st.style.color = "#0f3d7c";
+      st.textContent = "Logout गरियो।";
+    };
+
+    document.getElementById("reportOfficeSelect").onchange = lookupCustomerForReport;
+    document.getElementById("customerUserIdInput").oninput = lookupCustomerForReport;
+    document.getElementById("manualCustomerNameInput").oninput = lookupCustomerForReport;
+    document.getElementById("manualCustomerPhoneInput").oninput = lookupCustomerForReport;
+    document.getElementById("serviceReportTitleInput").oninput = refreshReportPreview;
+    document.getElementById("serviceReportStatusInput").onchange = refreshReportPreview;
+    document.getElementById("workDoneDetailsInput").oninput = refreshReportPreview;
+
+    document.getElementById("createReportAndSendAdminBtn").onclick = saveAndSendReportToAdmin;
+    document.getElementById("sendReportCopyToAdminBtn").onclick = saveAndSendReportToAdmin;
+    document.getElementById("printReportBtn").onclick = function () {
+      refreshReportPreview();
+      window.print();
+    };
+
+    window.addEventListener("hashchange", function () {
+      if (isAdminRouteActive()) {
+        openPage("admin");
+      } else if (document.getElementById("page-admin").classList.contains("active")) {
+        openPage("home");
+      }
+    });
+
+    syncReportOfficeDropdown();
+    mountReportTo("technicianReportMount");
+    renderAmcOfficesTable();
+    renderAdminMemberLoginLog();
+    renderAdminAmcManageTable();
+    renderAdminStaffIdCards();
+    renderAdminStaffPermTable();
+    renderHomeTechTeam();
+    renderMemberVideos();
+    renderAllComplainViews();
+    updateMemberBadges();
+    syncMemberLoginPortal();
+    syncTechnicalView();
+    lookupCustomerForReport();
+
+    if (isAdminRouteActive()) {
+      openPage("admin");
+    } else {
+      openPage("home");
+    }
+  </script>
+</body>
+</html>
